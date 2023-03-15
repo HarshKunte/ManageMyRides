@@ -168,3 +168,38 @@ export const resetPassword = asyncHandler(async (req, res) => {
     })
 })
 
+export const changePassword = asyncHandler(async(req,res) => {
+    const {oldPassword, newPassword} = req.body;
+    const user = req.user;
+    console.log(user);
+
+    if(oldPassword === newPassword){
+        throw new CustomError("Old and new password shouldn't be same", 401)
+    }
+
+    const dbUser = await User.findOne({_id:user._id}).select('+password')
+    if(!dbUser){
+        throw new CustomError('User not found!',401)
+    }
+
+    const isOldPasswordMatched = await dbUser.comparePassword(oldPassword)
+
+    if(!isOldPasswordMatched){
+        throw new CustomError("Old password does not match", 400)
+    }
+
+    dbUser.password = newPassword;
+
+    await dbUser.save()
+
+    //create token and send as response
+    const token = dbUser.getJwtToken()
+    dbUser.password = undefined
+
+    res.cookie("token", token, cookieOptions)
+    res.status(200).json({
+        success:true,
+        user:dbUser
+    })
+
+})

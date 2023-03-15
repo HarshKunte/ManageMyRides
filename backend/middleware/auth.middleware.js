@@ -1,7 +1,7 @@
 import User from '../models/user.schema.js'
 import JWT from 'jsonwebtoken'
 import asyncHandler from '../services/asyncHandler.js'
-import CustomError from '../utils/customError.js'
+import CustomError from '../services/customError.js'
 import config from '../config/index.js'
 
 export const isLoggedIn = asyncHandler(async(req,res,next)=>{
@@ -21,7 +21,7 @@ export const isLoggedIn = asyncHandler(async(req,res,next)=>{
         const decodedJwtPayload = JWT.verify(token, config.JWT_SECRET)
         //decodedJwtPayload contains _id
         //find user based on id, set this in req.user
-        req.user = await User.findById(decodedJwtPayload._id, "name email role")
+        req.user = await User.findById(decodedJwtPayload._id, "name email")
         next()
     } catch (error) {
         throw new CustomError('NOt authorized to access this route', 401)
