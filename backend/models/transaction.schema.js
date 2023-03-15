@@ -10,7 +10,7 @@ const transactionSchema = mongoose.Schema(
         },
         customer_name:{
             type: String,
-            required: true
+            required: [true, "Customer name is required."]
         },
         customer_mobile:{
             type: String
@@ -20,19 +20,19 @@ const transactionSchema = mongoose.Schema(
         },
         from_address:{
             type: String,
-            required: true
+            required: [true, "From address is required."]
         },
         to_address:{
             type: String,
-            required: true
+            required: [true, "To address is required."]
         },
         from_date:{
             type: Date,
-            required: true
+            required: [true, "From date is required."]
         },
         to_date:{
             type: Date,
-            required: true
+            required: [true, "To date is required."]
         },
         journey_time:{
             type: String
@@ -72,7 +72,7 @@ const transactionSchema = mongoose.Schema(
         },
         total_fare_amt:{
             type:Number,
-            required: true
+            required: [true, "Total amount is required."]
         },
         toll_amt:{
             type:Number,
@@ -93,7 +93,7 @@ const transactionSchema = mongoose.Schema(
         payment_mode:{
             type: String,
             enum: Object.keys(PaymentModes),
-            required: true
+            required: [true, "Payment mode is required."]
         }
         
     },
