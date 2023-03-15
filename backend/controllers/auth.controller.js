@@ -3,6 +3,7 @@ import asyncHandler from '../services/asyncHandler.js'
 import CustomError from '../services/customError.js'
 
 import crypto from 'crypto'
+import mailHelper from '../util/mailHelper.js'
 
 export const cookieOptions = {
     expires: new Date(Date.now() + 3*24*60*60*1000), //3 days
@@ -125,7 +126,78 @@ export const forgotPassword = asyncHandler(async(req, res) => {
         user.forgotPasswordToken = undefined
         user.forgotPasswordExpiry = undefined
         await user.save({validateBeforeSave:false})
+        console.log(error)
         throw new CustomError(error.message || "Email couldn't be sent!!", 500)
     }
 })
 
+export const resetPassword = asyncHandler(async (req, res) => {
+    const {token: resetToken} = req.params
+    const {password, confirmPassword } = req.body
+
+    const resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+
+    const user = await User.findOne({
+        forgotPasswordToken: resetPasswordToken,
+        forgotPasswordExpiry: {$gt: Date.now()}
+    })
+
+    if(!user){
+        throw new CustomError("Password token is invalid or expired", 400)
+    }
+
+    if(password !== confirmPassword){
+        throw new CustomError("Password and confirm password does not match!", 400)
+    }
+
+    user.password = password;
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+
+    await user.save()
+
+    //create token and send as response
+    const token = user.getJwtToken()
+    user.password = undefined
+
+    res.cookie("token", token, cookieOptions)
+    res.status(200).json({
+        success:true,
+        user
+    })
+})
+
+export const changePassword = asyncHandler(async(req,res) => {
+    const {oldPassword, newPassword} = req.body;
+    const {user} = req.user;
+
+    if(oldPassword === newPassword){
+        throw new CustomError("Old and new password shouldn't be same", 401)
+    }
+
+    const dbUser = await User.findOne({_id:user._id}).select('+password')
+    if(!dbUser){
+        throw new CustomError('User not found!',401)
+    }
+
+    const isOldPasswordMatched = await dbUser.comparePassword(oldPassword)
+
+    if(!isOldPasswordMatched){
+        throw new CustomError("Old password does not match", 400)
+    }
+
+    dbUser.password = newPassword;
+
+    await dbUser.save()
+
+    //create token and send as response
+    const token = dbUser.getJwtToken()
+    dbUser.password = undefined
+
+    res.cookie("token", token, cookieOptions)
+    res.status(200).json({
+        success:true,
+        dbUser
+    })
+
+})
