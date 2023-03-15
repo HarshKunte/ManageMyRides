@@ -61,7 +61,6 @@ userSchema.methods = {
         return JWT.sign(
             {
                 _id: this._id,
-                role: this.role
             },
             config.JWT_SECRET,
             {
