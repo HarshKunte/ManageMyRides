@@ -35,6 +35,12 @@ function LoginForm() {
                 navigate('/')
             }
         })
+        .catch(({response}) =>{
+          if(!response.data?.success || response.data?.message){
+            toast.error(response.data?.message)
+            setState(initialState)
+          }
+        })
     }  
 
     return ( 
@@ -106,7 +112,7 @@ function LoginForm() {
       
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                     Don't have an account?
-                    <Link to="/" className="text-gray-700 underline">
+                    <Link to="/signup" className="text-gray-700 underline">
              Sign Up
             </Link>
                   </p>

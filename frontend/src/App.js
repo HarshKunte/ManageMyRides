@@ -11,6 +11,7 @@ import LoginForm from './components/LoginForm';
 import {Toaster} from "react-hot-toast"
 import PrivateRoute from './auth_routes/PrivateRoute';
 import Home from './components/Home';
+import MainContainer from './components/MainContainer';
 
 function App() {
   return (
@@ -22,12 +23,12 @@ function App() {
           exact
           element={
             <PrivateRoute>
-              <Home />
+              <MainContainer />
             </PrivateRoute>
           }
         />
           <Route  path="/" element={<LoginSignup/>}> 
-            <Route  path="/" element={<SignupForm/>}/>
+            <Route  path="/signup" element={<SignupForm/>}/>
             <Route  path="/login" element={<LoginForm/>}/>
           </Route>
           {/* TODO: Work 404 not found route  */}
