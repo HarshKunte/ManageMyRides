@@ -66,11 +66,14 @@ const transactionSchema = mongoose.Schema(
         fuel_rate:{
             type: Number
         },
+        fuel_required:{
+            type: Number
+        },
         ride_mode:{
             type: String,
             enum: Object.keys(RideModes),
         },
-        total_fare_amt:{
+        total_bill:{
             type:Number,
             required: [true, "Total amount is required."]
         },
