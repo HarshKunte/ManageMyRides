@@ -10,7 +10,7 @@ function MainContainer() {
     <Navbar/>
   </div> 
   <div className="drawer-side col-span-5 md:col-span-2 lg:col-span-1">
-    <label for="my-drawer-2" className="drawer-overlay"></label> 
+    <label htmlFor="my-drawer-2" className="drawer-overlay"></label> 
     <Sidebar/>
   
   </div>
