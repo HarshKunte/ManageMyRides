@@ -60,6 +60,7 @@ function NewTransaction() {
   };
 
   const handleChange = (e) => {
+    console.log(e.target.value);
     let value =
       e.target.type == "number" ? Number(e.target.value) : e.target.value;
     setState((prevState) => ({

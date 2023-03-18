@@ -1,14 +1,63 @@
-import React from "react";
+/*global google*/
+import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { rideModes, fuelModes, paymentModes } from "../../../util/enums.js";
-import { useForm } from "react-hook-form";
-function NewTransactionForm({ handleChange, state,setState, submitData,register,
-  handleSubmit,errors, calculateDays }) {
+import {
+  useJsApiLoader,
+  GoogleMap,
+  Marker,
+  Autocomplete,
+  DirectionsRenderer,
+  LoadScript,
+  StandaloneSearchBox,
+} from '@react-google-maps/api'
+import { googleMapsApiData } from "../../../config/index.js";
 
+const center = { lat: 48.8584, lng: 2.2945 }
+
+function NewTransactionForm({ handleChange, state, submitData,register,
+  handleSubmit,errors, setState }) {
+
+    const [directionsResponse, setDirectionsResponse] = useState()
+    const inputRef1 = useRef();
+    const inputRef2 = useRef();
+
+    const onPlaceChanged = async () =>{
+      if(inputRef1.current.value=='' || inputRef2.current.value==''){
+        return
+      }
+      setState({...state, ['from_address']:inputRef1.current.value, ['to_address']:inputRef2.current.value})
+      // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService()
+    const directionsRenderer = new google.maps.DirectionsRenderer({draggable:true})
+    directionsRenderer.addListener("directions_changed", () => {
+      const directions = directionsRenderer.getDirections();
   
-  
+      if (directions) {
+        console.log(directions);
+      }
+    });
+    const results = await directionsService.route({
+      origin: inputRef1.current.value,
+      destination: inputRef2.current.value,
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+    setDirectionsResponse(results)
+    }
+
+    const onDragEnd = (e) =>{
+      console.log(e);
+    }
+
+  //   const { isLoaded } = useJsApiLoader(googleMapsApiData)
+    
+  // if(!isLoaded){
+  //   return <>loading</>
+  // }
   return (
     <section className="">
+      <LoadScript googleMapsApiKey={googleMapsApiData.googleMapsApiKey} libraries={googleMapsApiData.libraries}>
       <h2 className="text-lg font-semibold mb-10 text-gray-700 capitalize">
         Add new transaction
       </h2>
@@ -141,17 +190,19 @@ function NewTransactionForm({ handleChange, state,setState, submitData,register,
             >
               Journey start location<span className="text-red-500">*</span>
             </label>
+            <Autocomplete onPlaceChanged={onPlaceChanged}>
             <input
               name="from_address"
               type="text"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
               placeholder=""
-              {...register("from_address", {
-                required: "Required",
-              })}
-              value={state.from_address}
-              onChange={handleChange}
+              ref={inputRef1}
+              // {...register("from_address", {
+              //   required: "Required",
+              // })}
+              
             />
+           </Autocomplete>
             {errors.from_address && (
             <p className="text-xs  text-red-500">{errors.from_address.message}</p>
           )}
@@ -160,22 +211,28 @@ function NewTransactionForm({ handleChange, state,setState, submitData,register,
             <label htmlFor="to_address" className="block text-gray-700 text-sm">
               Journey end location<span className="text-red-500">*</span>
             </label>
+            {/* // eslint-disable-next-line no-undef */}
+            <Autocomplete onPlaceChanged={onPlaceChanged}>
             <input
               name="to_address"
               type="text"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
               placeholder=""
-              {...register("to_address", {
-                required: "Required",
-              })}
-              value={state.to_address}
-              onChange={handleChange}
+              ref={inputRef2}
+              // {...register("to_address", {
+              //   required: "Required",
+              // })}
+              // value={state.to_address}
+              // onChange={handleChange}
             />
+            </Autocomplete>
             {errors.to_address && (
             <p className="text-xs  text-red-500">{errors.to_address.message}</p>
           )}
           </div>
+          
           <div className="col-span-4 md:col-span-2 xl:col-span-3 flex items-center">
+            <Autocomplete>
             <input
               name="round_trip"
               type="checkbox"
@@ -183,12 +240,32 @@ function NewTransactionForm({ handleChange, state,setState, submitData,register,
               onChange={handleChange}
               className="checkbox mr-2"
             />
+            </Autocomplete>
             <label
               htmlFor="round_trip"
               className="block text-gray-700 text-base"
             >
               Round trip
             </label>
+          </div>
+          <div className="col-span-4 md:col-span-6 xl:col-span-9 h-96">
+          <GoogleMap
+          center={center}
+          zoom={15}
+          mapContainerStyle={{ width: '50%', height: '100%' }}
+          options={{
+            zoomControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+            fullscreenControl: false,
+          }}
+         
+        >
+          <Marker position={center} draggable={true} onDragEnd={onDragEnd}/>
+          {directionsResponse && (
+            <DirectionsRenderer  directions={directionsResponse} />
+          )}
+        </GoogleMap>
           </div>
           <div className="col-span-2 lg:col-span-1">
             <label
@@ -488,6 +565,7 @@ function NewTransactionForm({ handleChange, state,setState, submitData,register,
           </button>
         </div>
       </form>
+      </LoadScript>
     </section>
   );
 }
