@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Link, redirect, useNavigate } from "react-router-dom";
-import { signup } from "../helpers/auth.helper";
+import { signup } from "../../helpers/auth.helper";
 function Signup() {
   const navigate = useNavigate()
   const {

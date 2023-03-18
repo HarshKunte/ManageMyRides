@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useForm} from 'react-hook-form'
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../helpers/auth.helper';
+import { login } from '../../helpers/auth.helper';
 function LoginForm() {
     const {
         register,

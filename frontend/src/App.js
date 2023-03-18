@@ -1,14 +1,14 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginSignup from "./components/LoginSignup";
-import SignupForm from "./components/SignupForm";
-import LoginForm from "./components/LoginForm";
+import LoginSignup from "./components/auth/LoginSignup";
+import SignupForm from "./components/auth/SignupForm";
+import LoginForm from "./components/auth/LoginForm";
 import { Toaster } from "react-hot-toast";
 import PrivateRoute from "./auth_routes/PrivateRoute";
 import Home from "./components/Home";
 import MainContainer from "./components/MainContainer";
-import NewTransaction from "./components/NewTransaction";
+import NewTransaction from "./components/transaction/create/NewTransaction";
 
 function App() {
   return (

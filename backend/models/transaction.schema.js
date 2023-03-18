@@ -26,6 +26,10 @@ const transactionSchema = mongoose.Schema(
             type: String,
             required: [true, "To address is required."]
         },
+        round_trip:{
+            type:Boolean,
+            default: false
+        },
         from_date:{
             type: Date,
             required: [true, "From date is required."]
@@ -34,8 +38,8 @@ const transactionSchema = mongoose.Schema(
             type: Date,
             required: [true, "To date is required."]
         },
-        journey_time:{
-            type: String
+        no_of_days:{
+            type: Number
         },
         starting_kms:{
             type: Number,
@@ -85,7 +89,7 @@ const transactionSchema = mongoose.Schema(
             type:Number,
             default:0
         },
-        commission_amt:{
+        company_commission:{
             type:Number,
             default:0
         },
