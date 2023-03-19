@@ -130,6 +130,8 @@ function NewTransaction() {
       handleChange={handleChange}
       state={state}
       submitData={submitData}
+      setError = {setError}
+      clearErrors={clearErrors}
     />
   );
 }

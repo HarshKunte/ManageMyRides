@@ -6,9 +6,12 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  //TODO: remove this
+  //commented strict mode as it causes map to render 2 times
+  //which cause issue in clearing previous route when new one is set
+  // <React.StrictMode>
     <App />
-  </React.StrictMode>
+  // </React.StrictMode> 
 );
 
 // If you want to start measuring performance in your app, pass a function
