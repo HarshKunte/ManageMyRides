@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import {PaymentModes, RideModes, FuelModes} from '../util/enums'
+import {PaymentModes, RideModes, FuelModes} from '../util/enums.js'
 
 const transactionSchema = mongoose.Schema(
     {

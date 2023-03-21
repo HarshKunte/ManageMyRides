@@ -37,8 +37,8 @@ function NewTransactionForm({
      
       setState({
         ...state,
-        ["from_address"]: inputRef1.current.value,
-        ["to_address"]: inputRef2.current.value,
+        "from_address": inputRef1.current.value,
+        "to_address": inputRef2.current.value,
       });
 
       //get directions to display on map
@@ -309,6 +309,10 @@ function NewTransactionForm({
                   {errors.maps_error.message}
                 </p>
               )}
+              {
+                directionsResponse &&
+              <p className="text-sm text-gray-400">You can also drag markers on map to change the location.</p>
+              }
               <div className="w-full md:w-1/2 h-full">
                 {/* Google Maps to show directions */}
                 <Map directionsResponse={directionsResponse} marker1={marker1} marker2={marker2} draggableMap={true} onMarkerUpdate={onMarkerUpdate}/>

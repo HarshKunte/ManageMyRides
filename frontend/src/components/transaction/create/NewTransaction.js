@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import NewTransactionForm from "./NewTransactionForm";
 import moment from 'moment'
+import {toast} from 'react-hot-toast'
+import { createTransaction } from "../../../helpers/transaction.helper";
 function NewTransaction() {
   const initialState = {
     customer_name: "",
@@ -54,9 +56,32 @@ function NewTransaction() {
     return days;
   };
 
-  const submitData = () => {
-    
-    console.log(state);
+  const submitData = () => {    
+    if(state.from_address ===""){
+      setError('from_address',{
+        type: "required",
+        message:"Required"
+      })
+      return
+    }
+    if(state.to_address ===""){
+      setError('from_address',{
+        type: "required",
+        message:"Required"
+      })
+      return
+    }
+
+    createTransaction(state)
+    .then((res) =>{
+       toast.success("Created successfully!!")
+       setState(initialState)
+    })
+    .catch(err =>{
+      console.log(err);
+    })
+
+
   };
 
   const handleChange = (e) => {
@@ -78,7 +103,7 @@ function NewTransaction() {
         clearErrors("to_date");
         setState((prevState) => ({
           ...prevState,
-          ["no_of_days"]: calculateDays(prevState.to_date, prevState.from_date),
+          "no_of_days": calculateDays(prevState.to_date, prevState.from_date),
         }))
       }
      
@@ -92,7 +117,7 @@ function NewTransaction() {
       } else {
         setState((prevState) => ({
           ...prevState,
-          ["total_kms"]: value + state.closing_kms,
+          "total_kms": state.closing_kms - value,
         }));
       }
     }
@@ -107,7 +132,7 @@ function NewTransaction() {
         clearErrors("closing_kms");
         setState((prevState) => ({
           ...prevState,
-          ["total_kms"]: value + state.starting_kms,
+          "total_kms": value - state.starting_kms,
         }));
       }
     }

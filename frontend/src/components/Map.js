@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
-    useJsApiLoader,
     GoogleMap,
     Marker,
     DirectionsRenderer,
