@@ -46,7 +46,15 @@ function NewTransactionForm({
         inputRef1.current.value,
         inputRef2.current.value
       );
-      setDirectionsResponse(results);
+      if(results){
+        setDirectionsResponse(results);
+        let total_kms = results.routes[0].legs[0].distance.text.split(" ")[0];
+        setState({
+          ...state,
+          "total_kms": total_kms
+        })
+      }
+     
 
       //update the markers
       getGeoCodeAndUpdateMarker(inputRef1.current.value, setMarker1);

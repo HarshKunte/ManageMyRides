@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../../auth_routes";
+import { isAuthenticated } from "../../helpers/auth.helper.js";
 function LoginSignup() {
   const navigate = useNavigate()
   useEffect(()=>{

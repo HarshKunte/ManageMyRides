@@ -9,6 +9,7 @@ import PrivateRoute from "./auth_routes/PrivateRoute";
 import Home from "./components/Home";
 import MainContainer from "./components/MainContainer";
 import NewTransaction from "./components/transaction/create/NewTransaction";
+import ViewTransaction from "./components/transaction/view/ViewTransaction";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             }
           >
             <Route path="/add" element={<NewTransaction />} />
+            <Route path="/view" element={<ViewTransaction />} />
           </Route>
           <Route path="/" element={<LoginSignup />}>
             <Route path="/signup" element={<SignupForm />} />
