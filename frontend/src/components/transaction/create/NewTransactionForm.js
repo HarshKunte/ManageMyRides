@@ -98,10 +98,7 @@ function NewTransactionForm({
 
   return (
     <section className="">
-      <LoadScript
-        googleMapsApiKey={googleMapsApiData.googleMapsApiKey}
-        libraries={googleMapsApiData.libraries}
-      >
+      
         <h2 className="text-lg font-semibold mb-10 text-gray-700 capitalize">
           Add new transaction
         </h2>
@@ -468,14 +465,14 @@ function NewTransactionForm({
             </div>
             <div className="col-span-2 md:col-span-1">
               <label
-                htmlFor="fuel_type"
+                htmlFor="fuel_mode"
                 className="block text-gray-700 text-sm"
               >
                 Fuel Type<span className="text-red-500">*</span>
               </label>
               <select
-                name="fuel_type"
-                {...register("fuel_type", {
+                name="fuel_mode"
+                {...register("fuel_mode", {
                   required: "Required",
                 })}
                 onChange={handleChange}
@@ -491,9 +488,9 @@ function NewTransactionForm({
                 ))}
               </select>
 
-              {errors.fuel_type && (
+              {errors.fuel_mode && (
                 <p className="text-xs  text-red-500">
-                  {errors.fuel_type.message}
+                  {errors.fuel_mode.message}
                 </p>
               )}
             </div>
@@ -514,7 +511,7 @@ function NewTransactionForm({
                 value={state.fuel_required}
                 onChange={handleChange}
               />
-            {state.fuel_type && <span className="">{`${fuelModes[state.fuel_type].unit}`}</span>}
+            {state.fuel_mode && <span className="">{`${fuelModes[state.fuel_mode].unit}`}</span>}
             </label>
             </div>
             <div className="col-span-2 lg:col-span-2">
@@ -534,7 +531,7 @@ function NewTransactionForm({
                 value={state.fuel_rate}
                 onChange={handleChange}
               />
-              {state.fuel_type && <span className="">{`/${fuelModes[state.fuel_type].unit}`}</span>}
+              {state.fuel_mode && <span className="">{`/${fuelModes[state.fuel_mode].unit}`}</span>}
               </label>
             </div>
             <div className="col-span-2 lg:col-span-1">
@@ -762,7 +759,6 @@ function NewTransactionForm({
             </button>
           </div>
         </form>
-      </LoadScript>
     </section>
   );
 }

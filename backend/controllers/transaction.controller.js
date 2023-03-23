@@ -30,10 +30,9 @@ export const getTransactionById = asyncHandler(async (req, res)=>{
     }
 
     const transaction = await Transaction.findById(id)
-
     res.status(200).json({
         success: true,
-        message: "Transaction created with success",
+        message: "Transaction received with success",
         transaction
     })
 })

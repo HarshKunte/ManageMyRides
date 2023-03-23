@@ -10,10 +10,18 @@ import Home from "./components/Home";
 import MainContainer from "./components/MainContainer";
 import NewTransaction from "./components/transaction/create/NewTransaction";
 import ViewTransaction from "./components/transaction/view/ViewTransaction";
+import { ContextProvider } from "./context/Context";
+import { LoadScript } from "@react-google-maps/api";
+import { googleMapsApiData } from "./config";
 
 function App() {
   return (
     <div className="App font-['Poppins']">
+      <LoadScript
+        googleMapsApiKey={googleMapsApiData.googleMapsApiKey}
+        libraries={googleMapsApiData.libraries}
+      >
+      <ContextProvider>
       <Router>
         <Routes>
           <Route  path="/" exact
@@ -24,7 +32,7 @@ function App() {
             }
           >
             <Route path="/add" element={<NewTransaction />} />
-            <Route path="/view" element={<ViewTransaction />} />
+            <Route path="/view/:transactionId" element={<ViewTransaction />} />
           </Route>
           <Route path="/" element={<LoginSignup />}>
             <Route path="/signup" element={<SignupForm />} />
@@ -35,6 +43,8 @@ function App() {
         </Routes>
       </Router>
       <Toaster />
+      </ContextProvider>
+      </LoadScript>
     </div>
   );
 }

@@ -22,7 +22,7 @@ function NewTransaction() {
     rate_per_hr: 0,
     driver_allowance: 0,
     ride_mode: "",
-    fuel_type: "",
+    fuel_mode: "",
     fuel_required: 0,
     fuel_required: 0,
     fuel_rate: 0,

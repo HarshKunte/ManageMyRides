@@ -14,7 +14,6 @@ function Map({
   draggableMap,
   onMarkerUpdate,
 }) {
-  
   const onDragFromMarkerEnd = (res) => {
     console.log(res);
     getGeoCode(res.latLng.lat(), res.latLng.lng())
