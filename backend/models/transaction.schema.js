@@ -3,14 +3,14 @@ import {PaymentModes, RideModes, FuelModes} from '../util/enums.js'
 
 const transactionSchema = mongoose.Schema(
     {
+        _id:{
+            type: String,
+            required: true
+        },
         user:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User",
             required: true
-        },
-        transaction_id:{
-            type: String,
-            required: [true, "Transaction id is required."]
         },
         customer_name:{
             type: String,
@@ -117,6 +117,7 @@ const transactionSchema = mongoose.Schema(
         
     },
     {
+        _id: false,
         timestamps: true
     }
 )
