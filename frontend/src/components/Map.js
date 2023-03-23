@@ -3,6 +3,7 @@ import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
 import { googleMapsApiData } from "../config";
 import { getGeoCode } from "../helpers/map.helper";
 
+const google = window.google
 //intial position of map
 const center = { lat: 48.8584, lng: 2.2945 };
 

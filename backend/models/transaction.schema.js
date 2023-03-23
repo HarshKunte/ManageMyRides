@@ -8,6 +8,10 @@ const transactionSchema = mongoose.Schema(
             ref:"User",
             required: true
         },
+        transaction_id:{
+            type: String,
+            required: [true, "Transaction id is required."]
+        },
         customer_name:{
             type: String,
             required: [true, "Customer name is required."]
@@ -80,6 +84,14 @@ const transactionSchema = mongoose.Schema(
         total_bill:{
             type:Number,
             required: [true, "Total amount is required."]
+        },
+        payment_received:{
+            type: String,
+            default: "yes"
+        },
+        pending_payment_amt:{
+            type: Number,
+            default:0
         },
         toll_amt:{
             type:Number,

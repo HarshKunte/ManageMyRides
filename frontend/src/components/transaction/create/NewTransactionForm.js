@@ -2,10 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { rideModes, fuelModes, paymentModes } from "../../../util/enums.js";
-import {
-  Autocomplete,
-  LoadScript,
-} from "@react-google-maps/api";
+import { Autocomplete, LoadScript } from "@react-google-maps/api";
 import { googleMapsApiData } from "../../../config/index.js";
 import { getDirectionsResponse } from "../../../helpers/map.helper.js";
 import Map from "../../Map.js";
@@ -19,7 +16,7 @@ function NewTransactionForm({
   errors,
   setState,
   setError,
-  clearErrors
+  clearErrors,
 }) {
   const [directionsResponse, setDirectionsResponse] = useState();
   //testing
@@ -34,49 +31,48 @@ function NewTransactionForm({
       return;
     }
     try {
-     
-      setState({
-        ...state,
-        "from_address": inputRef1.current.value,
-        "to_address": inputRef2.current.value,
-      });
+      console.log(inputRef1.current.value);
+      console.log(inputRef2.current.value);
+      setState(prevState => ({
+        ...prevState,
+        from_address: inputRef1.current.value,
+        to_address: inputRef2.current.value,
+      }));
+      clearErrors("from_address")
 
       //get directions to display on map
       const results = await getDirectionsResponse(
         inputRef1.current.value,
         inputRef2.current.value
       );
-      if(results){
+      if (results) {
         setDirectionsResponse(results);
         let total_kms = results.routes[0].legs[0].distance.text.split(" ")[0];
-        setState({
-          ...state,
-          "total_kms": total_kms
-        })
+        setState(prevState => ({
+          ...prevState,
+          total_kms: total_kms,
+        }));
       }
-     
 
       //update the markers
       getGeoCodeAndUpdateMarker(inputRef1.current.value, setMarker1);
       getGeoCodeAndUpdateMarker(inputRef2.current.value, setMarker2);
 
       //clear errors if displayed
-      clearErrors('maps_error')
-    } catch (err) {  
+      clearErrors("maps_error");
+    } catch (err) {
       console.log(err);
-      if(err.code ==='ZERO_RESULTS'){
+      if (err.code === "ZERO_RESULTS") {
         setError("maps_error", {
           type: "custom",
           message: "No route found. Please select valid destination.",
-        })
-      }
-      else{
+        });
+      } else {
         setError("maps_error", {
           type: "custom",
           message: err.message,
-        })
+        });
       }
-      
     }
   };
 
@@ -297,13 +293,13 @@ function NewTransactionForm({
             </div>
 
             <div className="col-span-4 md:col-span-2 xl:col-span-3 flex items-center">
-                <input
-                  name="round_trip"
-                  type="checkbox"
-                  defaultChecked={state.round_trip}
-                  onChange={handleChange}
-                  className="checkbox mr-2"
-                />
+              <input
+                name="round_trip"
+                type="checkbox"
+                defaultChecked={state.round_trip}
+                onChange={handleChange}
+                className="checkbox mr-2"
+              />
               <label
                 htmlFor="round_trip"
                 className="block text-gray-700 text-base"
@@ -312,18 +308,25 @@ function NewTransactionForm({
               </label>
             </div>
             <div className="col-span-4 md:col-span-6 xl:col-span-9 h-96">
-            {errors.maps_error && (
+              {errors.maps_error && (
                 <p className="text-xs  text-red-500">
                   {errors.maps_error.message}
                 </p>
               )}
-              {
-                directionsResponse &&
-              <p className="text-sm text-gray-400">You can also drag markers on map to change the location.</p>
-              }
+              {directionsResponse && (
+                <p className="text-sm text-gray-400">
+                  You can also drag markers on map to change the location.
+                </p>
+              )}
               <div className="w-full md:w-1/2 h-full">
                 {/* Google Maps to show directions */}
-                <Map directionsResponse={directionsResponse} marker1={marker1} marker2={marker2} draggableMap={true} onMarkerUpdate={onMarkerUpdate}/>
+                <Map
+                  directionsResponse={directionsResponse}
+                  marker1={marker1}
+                  marker2={marker2}
+                  draggableMap={true}
+                  onMarkerUpdate={onMarkerUpdate}
+                />
               </div>
             </div>
             <div className="col-span-2 lg:col-span-1">
@@ -452,7 +455,9 @@ function NewTransactionForm({
                   Select
                 </option>
                 {Object.keys(rideModes).map((mode) => (
-                  <option key={mode} value={rideModes[mode]}>{rideModes[mode]}</option>
+                  <option key={mode} value={rideModes[mode]}>
+                    {rideModes[mode]}
+                  </option>
                 ))}
               </select>
               {errors.ride_mode && (
@@ -480,9 +485,12 @@ function NewTransactionForm({
                   Select
                 </option>
                 {Object.keys(fuelModes).map((mode) => (
-                  <option key={mode} value={fuelModes[mode]}>{fuelModes[mode]}</option>
+                  <option key={mode} value={fuelModes[mode].name}>
+                    {fuelModes[mode].name}
+                  </option>
                 ))}
               </select>
+
               {errors.fuel_type && (
                 <p className="text-xs  text-red-500">
                   {errors.fuel_type.message}
@@ -496,36 +504,42 @@ function NewTransactionForm({
               >
                 Qty of fuel required
               </label>
+              <label className="input-group mt-2">
               <input
                 name="fuel_required"
                 type="number"
-                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
+                className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
                 min={0}
                 defaultValue={0}
                 value={state.fuel_required}
                 onChange={handleChange}
               />
+            {state.fuel_type && <span className="">{`${fuelModes[state.fuel_type].unit}`}</span>}
+            </label>
             </div>
-            <div className="col-span-2 lg:col-span-1">
+            <div className="col-span-2 lg:col-span-2">
               <label
                 htmlFor="fuel_rate"
                 className="block text-gray-700 text-sm"
               >
                 Fuel rate (Rs.)
               </label>
+              <label className="input-group mt-2">
               <input
                 name="fuel_rate"
                 type="number"
-                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
+                className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
                 min={0}
                 defaultValue={0}
                 value={state.fuel_rate}
                 onChange={handleChange}
               />
+              {state.fuel_type && <span className="">{`/${fuelModes[state.fuel_type].unit}`}</span>}
+              </label>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-2 lg:col-span-1">
               <label htmlFor="toll_amt" className="block text-gray-700 text-sm">
-                Toll amount (Rs.)
+                Toll amt (Rs.)
               </label>
               <input
                 name="toll_amt"
@@ -626,9 +640,11 @@ function NewTransactionForm({
                 type="number"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
                 min={0}
+                max={state.total_bill}
                 defaultValue={0}
                 {...register("earnings", {
                   required: "Required",
+                  
                 })}
                 value={state.earnings}
                 onChange={handleChange}
@@ -639,6 +655,102 @@ function NewTransactionForm({
                 </p>
               )}
             </div>
+
+            <div className="col-span-2">
+              <label
+                htmlFor="payment_received"
+                className="block mb-2 text-gray-700 text-sm"
+              >
+                Payment received
+
+              </label>
+              <fieldset class="grid grid-cols-2 gap-x-4">
+                <div>
+                  <input
+                    type="radio"
+                    name="payment_received"
+                    value="yes"
+                    id="yes"
+                    class="peer hidden [&:checked_+_label_svg]:block"
+                    checked={state.payment_received === "yes"}
+                    onChange={handleChange}
+                  />
+
+                  <label
+                    for="yes"
+                    class="block cursor-pointer rounded-lg border border-gray-100 p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-green-500 peer-checked:ring-1 peer-checked:ring-green-500"
+                  >
+                    <div class="flex items-center justify-between">
+                      <p class="text-gray-700">Yes</p>
+
+                      <svg
+                        class="hidden h-5 w-5 text-green-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </label>
+                </div>
+
+                <div>
+                  <input
+                    type="radio"
+                    name="payment_received"
+                    value="no"
+                    id="no"
+                    class="peer hidden [&:checked_+_label_svg]:block"
+                    checked={state.payment_received === "no"}
+                    onChange={handleChange}
+                  />
+
+                  <label
+                    for="no"
+                    class="block cursor-pointer rounded-lg border border-gray-100 p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-red-500 peer-checked:ring-1 peer-checked:ring-red-500"
+                  >
+                    <div class="flex items-center justify-between">
+                      <p class="text-gray-700">No</p>
+
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="hidden h-5 w-5 text-red-600"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                        />
+                      </svg>
+                    </div>
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+
+            {state.payment_received==="no" && <div className="col-span-4 md:col-span-3">
+              <label htmlFor="earnings" className="block text-gray-700 text-sm">
+                Pending amt.
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="pending_payment_amt"
+                type="number"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
+                min={0}
+                value={state.pending_payment_amt}
+                onChange={handleChange}
+              />
+            </div>}
           </div>
 
           <div className="flex mt-6">

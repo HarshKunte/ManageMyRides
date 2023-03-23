@@ -11,7 +11,7 @@ export const paymentModes = {
 }
 
 export const fuelModes = {
-    CNG :"CNG",
-    PETROL: "PETROL",
-    DIESEL: "DIESEL"
+    CNG :{name:"CNG", unit:"kg"},
+    PETROL:{name:"PETROL", unit:"ltr"},
+    DIESEL: {name:"DIESEL", unit:"ltr"}
 }

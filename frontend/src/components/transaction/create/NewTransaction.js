@@ -32,6 +32,8 @@ function NewTransaction() {
     total_bill: 0,
     payment_mode: "",
     earnings: 0,
+    payment_received: "yes",
+    pending_payment_amt: 0
   };
 
   const {
@@ -56,7 +58,8 @@ function NewTransaction() {
     return days;
   };
 
-  const submitData = () => {    
+  const submitData = () => {  
+    console.log(state);  
     if(state.from_address ===""){
       setError('from_address',{
         type: "required",
@@ -120,6 +123,14 @@ function NewTransaction() {
           "total_kms": state.closing_kms - value,
         }));
       }
+    }
+    if (e.target.name==="payment_received") {
+        if (value ==="yes" && state.pending_payment_amt>0) {
+          setState(prevState =>({
+            ...prevState,
+          "pending_payment_amt": 0,
+          }))  
+        }
     }
     if (e.target.name == "closing_kms") {
       console.log(e.target.value);

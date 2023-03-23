@@ -4,19 +4,27 @@ import { TiLocation } from "react-icons/ti";
 import { AiOutlineCalendar, AiFillCar } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import Map from "../../Map.js";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { LoadScript, useJsApiLoader } from "@react-google-maps/api";
 import { googleMapsApiData } from "../../../config/index.js";
 function ViewTransaction() {
     const isLoaded = useJsApiLoader({googleMapsApiKey:googleMapsApiData.googleMapsApiKey})
   return (
     <>
+    <LoadScript
+        googleMapsApiKey={googleMapsApiData.googleMapsApiKey}
+        libraries={googleMapsApiData.libraries}
+      >
       <section className="p-2 md:p-5">
         <div className="flex flex-wrap gap-y-5">
           <div className="w-full lg:w-1/2 ">
             <h2 className="text-lg font-semibold text-gray-700 capitalize">
               John Doe
             </h2>
+            <div className="flex justify-between ">
             <p className="text-sm text-gray-400">+918786868776</p>
+            <p className="text-sm text-gray-400">Transaction ID: 4f90d13a42</p>
+            </div>
+            
             <div className="flex items-center space-x-2">
               <span class="inline-flex items-center justify-center my-4 rounded-full bg-purple-100 px-2.5 py-0.5 text-purple-700">
                 <p class="text-sm whitespace-nowrap font-medium">OLA</p>
@@ -28,6 +36,7 @@ function ViewTransaction() {
                 <p class="whitespace-nowrap text-sm font-medium">@16 km/hr</p>
               </span>
             </div>
+            <p className="text-sm text-gray-500 my-1"> CRN: 4f90d13a42</p>
             <div>
               <ol class="grid grid-cols-2 divide-x divide-gray-100 overflow-hidden rounded-lg border border-gray-100 text-sm text-gray-500 sm:grid-cols-2">
                 <li class="flex items-center  gap-2 bg-gray-50 p-4">
@@ -183,8 +192,13 @@ function ViewTransaction() {
 
                 <div>
                   <p class="text-sm text-gray-500">Total Amount</p>
-
                   <p class="text-lg font-medium text-gray-900">
+                    3500 <span className="text-xs">Rs.</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm text-red-500">Pending Amount</p>
+                  <p class="text-lg font-medium text-red-400">
                     3500 <span className="text-xs">Rs.</span>
                   </p>
                 </div>
@@ -193,6 +207,11 @@ function ViewTransaction() {
               <div className="flex space-x-2">
                 <div class="inline-flex  gap-2 rounded mt-2 bg-emerald-100 p-1 text-emerald-600">
                   <span class="text-xs font-medium">UPI</span>
+                </div>
+                <div class="inline-flex  gap-2 rounded mt-2 bg-red-100 p-1 text-red-600">
+                  
+                  <span class="text-xs font-medium">
+                  Pending</span>
                 </div>
             
               </div>
@@ -219,6 +238,7 @@ function ViewTransaction() {
           </div>
         </div>
       </section>
+      </LoadScript>
     </>
   );
 }
