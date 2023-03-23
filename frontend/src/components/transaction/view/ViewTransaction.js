@@ -17,6 +17,8 @@ import Context from "../../../context/Context.js";
 import moment from "moment";
 import { fuelModes } from "../../../util/enums.js";
 import { getDirectionsResponse } from "../../../helpers/map.helper.js";
+import Loading from "../../Loading.js";
+import NotFound from "../NotFound.js";
 function ViewTransaction() {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -52,13 +54,19 @@ function ViewTransaction() {
     
   }
   useEffect(() => {
+    if(!viewingTransaction)
     getData()
+    else
+    setData(viewingTransaction)
   }, [transactionId]);
 
   if(isLoading){
- return <>Loading</>
+ return <Loading/>
   }
 
+  if(!data){
+    return <NotFound/>
+  }
   return (
     <>
         <section className="p-2 md:p-5">
