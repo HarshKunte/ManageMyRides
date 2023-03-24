@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {useForm} from 'react-hook-form'
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import Context from '../../context/Context';
 import { login } from '../../helpers/auth.helper';
 function LoginForm() {
+  const {setUser} = useContext(Context)
     const {
         register,
         handleSubmit,
@@ -31,6 +33,7 @@ function LoginForm() {
         .then(res => {
             if(res.data?.success){
                 toast.success("Welcome!")
+                setUser(res.data.user)
                 setState(initialState)
                 navigate('/')
             }

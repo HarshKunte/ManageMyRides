@@ -32,7 +32,22 @@ const userSchema = mongoose.Schema(
             type:String,
         },
         forgotPasswordToken: String,
-        forgotPasswordExpiry: Date
+        forgotPasswordExpiry: Date,
+
+        //these fields will be calculated later based on transaction data
+        total_kms:{
+            type:Number,
+            default:0
+        },
+        total_transactions:{
+            type:Number,
+            default:0
+        },
+        total_earnings:{
+            type:Number,
+            default:0
+        },
+        
     },
     {
         timestamps: true

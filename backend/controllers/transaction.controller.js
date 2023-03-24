@@ -11,7 +11,6 @@ export const createTransaction = asyncHandler( async (req, res)=>{
         throw new CustomError('User not avaiable',401)
     }
     const data = {user, _id: nanoid(), ...req.body}
-
     const transaction = await Transaction.create(data)
 
     res.status(200).json({

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import {PaymentModes, RideModes, FuelModes} from '../util/enums.js'
+import User from './user.schema.js'
 
 const transactionSchema = mongoose.Schema(
     {
@@ -121,5 +122,59 @@ const transactionSchema = mongoose.Schema(
         timestamps: true
     }
 )
+
+//method to calculate totals of kms, earnings, transactions and save to User Db
+transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
+    //if total_kms or earnings is not modified do nothing
+    if(!this.isModified('total_kms') && !this.isModified('earnings')) return next()
+
+    const userId = this.user._id
+    User.aggregate([
+        {
+          "$match": {
+            _id: userId
+          }
+        },
+        {
+          "$lookup": {
+            "from": "transactions",
+            "localField": "_id",
+            "foreignField": "user",
+            "as": "transactions"
+          }
+        },
+        {
+          "$addFields": {
+            "total_kms": {
+              "$sum": "$transactions.total_kms"
+            },
+            "total_earnings": {
+              "$sum": "$transactions.earnings"
+            },
+            "total_transactions": {
+              "$size": "$transactions"
+            }
+          }
+        },
+        {
+            "$unset": "transactions"
+        },
+        {
+          "$merge": {
+            "into": "users",
+            "on": "_id",
+            "whenMatched": "merge",
+            "whenNotMatched": "discard"
+          }
+        }
+      ]).then(res =>{
+        console.log('ok');
+      }).catch(err =>{
+        console.log('Error',err);
+      })
+    next()
+})
+
+
 
 export default mongoose.model('Transaction', transactionSchema)
