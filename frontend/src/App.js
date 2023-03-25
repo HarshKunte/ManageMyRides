@@ -13,6 +13,7 @@ import ViewTransaction from "./components/transaction/view/ViewTransaction";
 import { ContextProvider } from "./context/Context";
 import { LoadScript } from "@react-google-maps/api";
 import { googleMapsApiData } from "./config";
+import EditTransaction from "./components/transaction/edit/EditTransaction";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           >
             <Route path="/add" element={<NewTransaction />} />
             <Route path="/view/:transactionId" element={<ViewTransaction />} />
+            <Route path="/edit/:transactionId" element={<EditTransaction />} />
           </Route>
           <Route path="/" element={<LoginSignup />}>
             <Route path="/signup" element={<SignupForm />} />

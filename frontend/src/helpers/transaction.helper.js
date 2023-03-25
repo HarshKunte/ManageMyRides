@@ -8,12 +8,16 @@ export const createTransaction = async (data) =>{
     const config = {headers:{Authorization: `Bearer ${token}`}}
     await axios.post(`${API}/transaction`,data, config)
 }
+export const editTransaction = async (data, id) =>{
+    const token = isAuthenticated()
+    const config = {headers:{Authorization: `Bearer ${token}`}}
+    return await axios.put(`${API}/transaction/${id}`,data, config)
+}
 
 export async function getTransactionById(id){
     const token = isAuthenticated()
     const config = {headers:{Authorization: `Bearer ${token}`}}
-    const resp =await axios.get(`${API}/transaction/${id}`, config)
-    return resp
+    return await axios.get(`${API}/transaction/${id}`, config)
 }
 
 export async function deleteTransactionById(id){

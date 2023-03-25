@@ -3,6 +3,7 @@ import {
   BsFuelPumpDiesel,
   BsCurrencyRupee,
   BsPiggyBankFill,
+  BsCheckCircle
 } from "react-icons/bs";
 import { TiLocation } from "react-icons/ti";
 import { TbFileInvoice } from "react-icons/tb";
@@ -11,8 +12,8 @@ import { FaRegMoneyBillAlt } from "react-icons/fa";
 import Map from "../../Map.js";
 import { LoadScript, useJsApiLoader } from "@react-google-maps/api";
 import { googleMapsApiData } from "../../../config/index.js";
-import { useNavigate, useParams } from "react-router-dom";
-import { deleteTransactionById, getTransactionById } from "../../../helpers/transaction.helper.js";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { deleteTransactionById, editTransaction, getTransactionById } from "../../../helpers/transaction.helper.js";
 import { toast } from "react-hot-toast";
 import Context from "../../../context/Context.js";
 import moment from "moment";
@@ -78,6 +79,20 @@ function ViewTransaction() {
     
   }
 
+  const markAsPaid = () =>{
+    editTransaction({payment_received:"yes", pending_payment_amt:0}, transactionId)
+    .then(res =>{
+      if(res.data?.success){
+        setData(res.data.transaction)
+        toast.success('Marked as paid!!')
+      }
+    })
+    .catch(err =>{
+      console.log(err);
+      toast.error('Failed to update!')
+    })
+  }
+
 
   if (isLoading) {
     return <Loading />;
@@ -90,6 +105,7 @@ function ViewTransaction() {
     <>
       <section className="p-2 flex flex-col md:px-5 py-0">
         <div class=" flex mb-5 sm:mb-10 self-end sm:self-start w-fit overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse  ">
+        <Link to={`/edit/${transactionId}`}>
           <button class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -108,6 +124,7 @@ function ViewTransaction() {
 
             <span className="hidden sm:block">Edit</span>
           </button>
+          </Link>
 
           <button onClick={deleteTransaction} class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
             <svg
@@ -135,10 +152,18 @@ function ViewTransaction() {
         </div>
         <div className="flex flex-wrap gap-y-5">
           <div className="w-full lg:w-1/2 ">
+            <div className="flex justify-between items-start">
+              <div>
             <p className="text-xs text-gray-400">Customer Details:</p>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-700 capitalize">
               {data.customer_name}
             </h2>
+            </div>
+            {data?.payment_received === "no" && <button onClick={markAsPaid} class="flex items-center px-3 rounded-xl border border-b-2 border-green-500 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
+            <BsCheckCircle className="w-4 h-4 text-green-500"/>
+            <span className="hidden sm:block">Mark as paid</span>
+          </button>}
+            </div>
             <div className="flex justify-between ">
               <p className="text-sm text-gray-400">+91{data.customer_mobile}</p>
               <p className="text-sm text-gray-400">
@@ -146,7 +171,7 @@ function ViewTransaction() {
               </p>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center space-x-2">
               <span class="inline-flex items-center justify-center my-4 rounded-full bg-purple-100 px-2.5 py-0.5 text-purple-700">
                 <p class="text-sm whitespace-nowrap font-medium">
                   {data.ride_mode}
@@ -159,6 +184,7 @@ function ViewTransaction() {
                   </p>
                 </span>
               )}
+              
               {(data.rate_per_hr || data.rate_per_km) && <span class="inline-flex items-center justify-center rounded-full bg-purple-100 px-2.5 py-0.5 text-purple-700">
                 {data.rate_per_km && (
                   <p class="whitespace-nowrap text-sm font-medium">{`@${data.rate_per_km} km/hr`}</p>
@@ -167,6 +193,29 @@ function ViewTransaction() {
                   <p class="whitespace-nowrap text-sm font-medium">{`@${data.rate_per_hr} km/hr`}</p>
                 )}
               </span>}
+
+              {data.payment_received==="no" && (
+               <span
+               class="inline-flex items-center justify-center rounded-full bg-red-100 px-2.5 py-0.5 text-red-700"
+             >
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 class="-ml-1 mr-1.5 h-4 w-4"
+               >
+                 <path
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                 />
+               </svg>
+             
+               <p class="whitespace-nowrap text-sm">Payment Pending</p>
+             </span>
+              )}
             </div>
             {data.company_crn && (
               <p className="text-sm text-gray-500 my-1">

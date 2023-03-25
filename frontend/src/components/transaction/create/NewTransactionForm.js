@@ -8,7 +8,6 @@ import { getDirectionsResponse } from "../../../helpers/map.helper.js";
 import Map from "../../Map.js";
 
 function NewTransactionForm({
-  handleChange,
   state,
   submitData,
   register,
@@ -23,8 +22,88 @@ function NewTransactionForm({
   const [marker1, setMarker1] = useState();
   const [marker2, setMarker2] = useState();
   //
-  const inputRef1 = useRef();
-  const inputRef2 = useRef();
+  const inputRef1 = useRef(state.from_address);
+  const inputRef2 = useRef(state.to_address);
+
+  const calculateDays = (date1, date2) => {
+    let days;
+    if (date1 == date2) {
+      days = 1;
+    } else {
+      let d1 = moment(date1);
+      let d2 = moment(date2);
+      days = d1.diff(d2, "days")+1;
+    }
+    return days;
+  };
+
+  const handleChange = (e) => {
+    console.log(e.target.value);
+    let value =
+      e.target.type == "number" ? Number(e.target.value) : e.target.value;
+    setState((prevState) => ({
+      ...prevState,
+      [e.target.name]: value,
+    }));
+    if(e.target.name=='from_date' || e.target.name =='to_date'){
+      if(state.to_date && (e.target.name=='from_date'&& value>state.to_date) || (e.target.name =='to_date' &&value<state.from_date)){
+        setError('to_date',{
+          type: "custom",
+          message: "Should be >= start date",
+        })
+      }
+      else{
+        clearErrors("to_date");
+        setState((prevState) => ({
+          ...prevState,
+          "no_of_days": calculateDays(prevState.to_date, prevState.from_date),
+        }))
+      }
+     
+    }
+    if (e.target.name == "starting_kms") {
+      if (value > state.closing_kms) {
+        setError("closing_kms", {
+          type: "custom",
+          message: "Should be greater than starting kms.",
+        });
+      } else {
+        setState((prevState) => ({
+          ...prevState,
+          "total_kms": state.closing_kms - value,
+        }));
+      }
+    }
+    if (e.target.name==="payment_received") {
+        if (value ==="yes" && state.pending_payment_amt>0) {
+          setState(prevState =>({
+            ...prevState,
+          "pending_payment_amt": 0,
+          }))  
+        }
+    }
+    if (e.target.name == "closing_kms") {
+      console.log(e.target.value);
+      if (state.starting_kms > value) {
+        setError("closing_kms", {
+          type: "custom",
+          message: "Should be greater than or equal to starting kms.",
+        });
+      } else {
+        clearErrors("closing_kms");
+        setState((prevState) => ({
+          ...prevState,
+          "total_kms": value - state.starting_kms,
+        }));
+      }
+    }
+    if (e.target.type == "checkbox") {
+      setState((prevState) => ({
+        ...prevState,
+        [e.target.name]: value === "on" ? true : false,
+      }));
+    }
+  };
 
   const onPlaceChanged = async () => {
     if (inputRef1.current.value == "" || inputRef2.current.value == "") {
@@ -96,12 +175,19 @@ function NewTransactionForm({
     onPlaceChanged();
   };
 
+
+  useEffect(()=>{
+    if(state.from_address && state.to_address){
+      inputRef1.current.value = state.from_address
+      inputRef2.current.value = state.to_address
+      onPlaceChanged()
+    }
+  },[])
+
   return (
     <section className="">
       
-        <h2 className="text-lg font-semibold mb-10 text-gray-700 capitalize">
-          Add new transaction
-        </h2>
+        
 
         <form onSubmit={handleSubmit(submitData)}>
           <div className="grid grid-cols-4 gap-6 mt-4  md:grid-cols-6 xl:grid-cols-9">
@@ -202,7 +288,7 @@ function NewTransactionForm({
                 {...register("from_date", {
                   required: "Date is required",
                 })}
-                value={state.from_date}
+                value={moment.utc(state.from_date).format('YYYY-MM-DD')}
                 onChange={handleChange}
               />
             </div>
@@ -221,12 +307,12 @@ function NewTransactionForm({
                 placeholder=""
                 name="to_date"
                 className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
-                min={state.from_date}
+                min={moment.utc(state.from_date).format('YYYY-MM-DD')}
                 max={moment().format("YYYY-MM-DD")}
                 {...register("to_date", {
                   required: "Date is required",
                 })}
-                value={state.to_date}
+                value={moment.utc(state.to_date).format('YYYY-MM-DD')}
                 onChange={handleChange}
               />
             </div>
@@ -452,7 +538,7 @@ function NewTransactionForm({
                   Select
                 </option>
                 {Object.keys(rideModes).map((mode) => (
-                  <option key={mode} value={rideModes[mode]}>
+                  <option key={mode} selected={state.ride_mode===rideModes[mode]} value={rideModes[mode]}>
                     {rideModes[mode]}
                   </option>
                 ))}
@@ -482,7 +568,7 @@ function NewTransactionForm({
                   Select
                 </option>
                 {Object.keys(fuelModes).map((mode) => (
-                  <option key={mode} value={fuelModes[mode].name}>
+                  <option key={mode} selected={state.fuel_mode===fuelModes[mode].name} value={fuelModes[mode].name}>
                     {fuelModes[mode].name}
                   </option>
                 ))}
@@ -574,8 +660,7 @@ function NewTransactionForm({
                 type="number"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
                 min={0}
-                defaultValue={0}
-                value={state.company_comission}
+                value={state.company_commission}
                 onChange={handleChange}
               />
             </div>
@@ -615,7 +700,7 @@ function NewTransactionForm({
                   Select
                 </option>
                 {Object.keys(paymentModes).map((mode) => (
-                  <option key={mode} value={paymentModes[mode]}>
+                  <option key={mode} selected={state.payment_mode===paymentModes[mode]} value={paymentModes[mode]}>
                     {paymentModes[mode]}
                   </option>
                 ))}

@@ -20,6 +20,28 @@ export const createTransaction = asyncHandler( async (req, res)=>{
     })
 })
 
+export const editTransaction = asyncHandler( async (req, res)=>{ 
+    const user = req.user
+    const id = req.params.id
+    if(!user){
+        throw new CustomError('User not avaiable',401)
+    }
+
+    const transaction = await Transaction.findByIdAndUpdate(id, req.body, {new:true})
+    if(!transaction){
+        return res.status(401).json({
+            success: false, 
+            message: "Invalid transaction Id.",
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Transaction created with success",
+        transaction
+    })
+})
+
 export const deleteTransactionById = asyncHandler(async (req, res)=>{
     const user = req.user
     const id = req.params.id
@@ -49,6 +71,12 @@ export const getTransactionById = asyncHandler(async (req, res)=>{
     }
 
     const transaction = await Transaction.findById(id)
+    if(!transaction){
+        return res.status(401).json({
+            success: false, 
+            message: "Invalid transaction Id.",
+        })
+    }
     res.status(200).json({
         success: true,
         message: "Transaction received with success",
