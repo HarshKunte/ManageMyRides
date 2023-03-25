@@ -172,7 +172,54 @@ transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
       }).catch(err =>{
         console.log('Error',err);
       })
-    next()
+      next()
+})
+
+transactionSchema.post('findOneAndDelete', async function(doc){
+    const userId = doc.user._id
+    User.aggregate([
+        {
+          "$match": {
+            _id: userId
+          }
+        },
+        {
+          "$lookup": {
+            "from": "transactions",
+            "localField": "_id",
+            "foreignField": "user",
+            "as": "transactions"
+          }
+        },
+        {
+          "$addFields": {
+            "total_kms": {
+              "$sum": "$transactions.total_kms"
+            },
+            "total_earnings": {
+              "$sum": "$transactions.earnings"
+            },
+            "total_transactions": {
+              "$size": "$transactions"
+            }
+          }
+        },
+        {
+            "$unset": "transactions"
+        },
+        {
+          "$merge": {
+            "into": "users",
+            "on": "_id",
+            "whenMatched": "merge",
+            "whenNotMatched": "discard"
+          }
+        }
+      ]).then(res =>{
+        console.log('ok');
+      }).catch(err =>{
+        console.log('Error',err);
+      })
 })
 
 

@@ -15,3 +15,9 @@ export async function getTransactionById(id){
     const resp =await axios.get(`${API}/transaction/${id}`, config)
     return resp
 }
+
+export async function deleteTransactionById(id){
+    const token = isAuthenticated()
+    const config = {headers:{Authorization: `Bearer ${token}`}}
+    return await axios.delete(`${API}/transaction/${id}`, config)
+}

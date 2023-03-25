@@ -78,7 +78,7 @@ function NewTransaction() {
     createTransaction(state)
     .then((res) =>{
        toast.success("Created successfully!!")
-      //  setState(initialState)
+       setState(initialState)
     })
     .catch(err =>{
       console.log(err);
