@@ -6,12 +6,10 @@ import {
   BsCheckCircle
 } from "react-icons/bs";
 import { TiLocation } from "react-icons/ti";
-import { TbFileInvoice } from "react-icons/tb";
+import { TbFileDownload } from "react-icons/tb";
 import { AiOutlineCalendar, AiFillCar } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import Map from "../../Map.js";
-import { LoadScript, useJsApiLoader } from "@react-google-maps/api";
-import { googleMapsApiData } from "../../../config/index.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { deleteTransactionById, editTransaction, getTransactionById } from "../../../helpers/transaction.helper.js";
 import { toast } from "react-hot-toast";
@@ -21,14 +19,18 @@ import { fuelModes } from "../../../util/enums.js";
 import { getDirectionsResponse } from "../../../helpers/map.helper.js";
 import Loading from "../../Loading.js";
 import NotFound from "../NotFound.js";
+import PdfDocument from "../../invoice/PdfDocument.js";
+import { generateInvoiceData } from "../../../helpers/invoice.helper.js";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 function ViewTransaction() {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [directionsResponse, setDirectionsResponse] = useState();
+  const [invoiceData, setInvoiceData] = useState();
 
   const { transactionId } = useParams();
   const navigate = useNavigate()
-  const { viewingTransaction, setViewingTransaction } = useContext(Context);
+  const {user, setUser, viewingTransaction, setViewingTransaction } = useContext(Context);
 
   const getData = async () => {
     try {
@@ -37,6 +39,7 @@ function ViewTransaction() {
       if (res.data?.success) {
         setViewingTransaction(res.data?.transaction);
         setData(res.data?.transaction);
+        setUser(res.data.user)
         setIsLoading(false);
 
         // eslint-disable-next-line no-undef
@@ -54,14 +57,24 @@ function ViewTransaction() {
       toast.error("Failed to receive data!");
     }
   };
+
+  //useEffect Hooks
   useEffect(() => {
     if (!viewingTransaction) getData();
     else setData(viewingTransaction);
   }, [transactionId]);
+  useEffect(() => {
+    if(data){
+      //set invoice data
+      let invoice = generateInvoiceData(user,data)
+      console.log(invoice);
+      setInvoiceData(invoice)
+    }
+  }, [data]);
 
 
   const deleteTransaction = () =>{
-    console.log('delete clicked');
+   if(window.confirm("Are you sure you want to delete this transaction?")){
     deleteTransactionById(data._id)
     .then(res =>{
       console.log(res);
@@ -76,6 +89,7 @@ function ViewTransaction() {
       console.log(err);
       toast.error('Delete failed.')
     })
+  }
     
   }
 
@@ -92,7 +106,6 @@ function ViewTransaction() {
       toast.error('Failed to update!')
     })
   }
-
 
   if (isLoading) {
     return <Loading />;
@@ -144,11 +157,18 @@ function ViewTransaction() {
 
             <span className="hidden sm:block">Delete</span>
           </button>
-          <button class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
-            <TbFileInvoice className="text-amber-400 w-4 h-4"/>
+          <PDFDownloadLink
+          document={<PdfDocument invoicedata={invoiceData} />}
+          fileName="invoice.pdf"
+        >
+          {({ blob, url, loading, error }) =>
+            loading ? "" : <p target='_blank' class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
+            <TbFileDownload  className="text-amber-400 w-4 h-4"/>
 
-            <span className="hidden sm:block">Invoice</span>
-          </button>
+            <span className="">Invoice</span>
+          </p>
+          }
+        </PDFDownloadLink>
         </div>
         <div className="flex flex-wrap gap-y-5">
           <div className="w-full lg:w-1/2 ">

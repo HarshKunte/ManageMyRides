@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
 import BillFrom from './BillFrom';
+import moment from 'moment';
 
 const styles = StyleSheet.create({
     container:{
         display:"flex",
-        marginTop: 36,
+        marginTop: 4,
         flexDirection:"row"
     },
     invoiceContainer:{
-        marginTop: 20,
-        paddingBottom: 3,
+        marginTop: 24,
         width:"40%",
     },
     invoiceNoContainer: {
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     invoiceDateContainer: {
+        marginTop:4,
         flexDirection: 'row',
         justifyContent: 'flex-end'
     },
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
         fontStyle: 'bold',
     },
     label: {
-        width: 60
+        marginRight:2
     }
 });
 
@@ -38,11 +39,11 @@ const InvoiceNo = ({ invoice }) => (
         <View style={styles.invoiceContainer}>
         <View style={styles.invoiceNoContainer}>
             <Text style={styles.label}>Invoice No:</Text>
-            <Text style={styles.invoiceDate}>{invoice.invoice_no}</Text>
+            <Text style={styles.invoiceDate}>INV-{invoice.id}</Text>
         </View >
         <View style={styles.invoiceDateContainer}>
             <Text style={styles.label}>Date: </Text>
-            <Text >{invoice.trans_date}</Text>
+            <Text >{moment().format('DD-MM-YYYY')}</Text>
         </View >
         </View>
         </View>

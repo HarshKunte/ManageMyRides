@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     tableContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop: 24,
+        marginTop: 18,
         borderWidth: 1,
         borderColor: '#3778C2',
     },
@@ -18,7 +18,7 @@ const InvoiceItemsTable = ({ invoice }) => (
     <View style={styles.tableContainer}>
         <InvoiceTableHeader />
         <InvoiceTableRow items={invoice.items} />
-        <InvoiceTableFooter items={invoice.items} />
+        <InvoiceTableFooter invoice={invoice} />
     </View>
 );
 

@@ -29,7 +29,7 @@ const InvoiceTableRow = ({ items }) => {
     const rows = items.map(item =>
         <View style={styles.row} key={item.sno.toString()}>
             <Text style={styles.description}>{item.desc}</Text>
-            <Text style={styles.amount}>{(item.qty * item.rate).toFixed(2)}</Text>
+            <Text style={styles.amount}>{item.qty}</Text>
         </View>
     );
     return (<Fragment>{rows}</Fragment>)

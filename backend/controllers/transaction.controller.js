@@ -80,6 +80,7 @@ export const getTransactionById = asyncHandler(async (req, res)=>{
     res.status(200).json({
         success: true,
         message: "Transaction received with success",
-        transaction
+        transaction,
+        user
     })
 })

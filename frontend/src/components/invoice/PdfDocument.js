@@ -1,5 +1,5 @@
-import React from "react";
-import { Page, Document, StyleSheet, Font } from "@react-pdf/renderer";
+import React, { useEffect } from "react";
+import { Page, Document, StyleSheet, Font, Text } from "@react-pdf/renderer";
 
 import InvoiceTitle from "./InvoiceTitle";
 import InvoiceNo from "./InvoiceNo";
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         fontFamily: 'Helvetica',
         fontSize: 11,
-        paddingTop: 30,
+        paddingTop: 16,
         paddingLeft: 50,
         paddingRight: 50,
         lineHeight: 1.5,
@@ -28,6 +28,18 @@ const styles = StyleSheet.create({
 });
 
 const PdfDocument = ({ invoicedata }) => {
+
+    useEffect(()=>{
+    },[invoicedata])
+
+    if(!invoicedata){
+        return <Document>
+            <Page size="A4" style={styles.page} >
+                <Text>Failed to load Invoice Data</Text>
+            </Page>
+        </Document>
+    }
+
     return (
         <Document>
             <Page size="A4" style={styles.page} >

@@ -21,7 +21,7 @@ export const isLoggedIn = asyncHandler(async(req,res,next)=>{
         const decodedJwtPayload = JWT.verify(token, config.JWT_SECRET)
         //decodedJwtPayload contains _id
         //find user based on id, set this in req.user
-        req.user = await User.findById(decodedJwtPayload._id, "name email")
+        req.user = await User.findById(decodedJwtPayload._id, "name email mobile company_name")
         next()
     } catch (error) {
         throw new CustomError('NOt authorized to access this route', 401)

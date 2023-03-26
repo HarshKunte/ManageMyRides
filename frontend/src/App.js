@@ -40,7 +40,6 @@ function App() {
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/login" element={<LoginForm />} />
           </Route>
-          {/* TODO: Work 404 not found route  */}
           <Route path="*" element={<Home />} />
         </Routes>
       </Router>

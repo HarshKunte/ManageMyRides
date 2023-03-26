@@ -1,28 +1,30 @@
 import React from 'react';
-import { Text, View, StyleSheet, Font } from '@react-pdf/renderer';
+import { Text, View, StyleSheet } from '@react-pdf/renderer';
 
 
 
 const styles = StyleSheet.create({
     headerContainer: {
-        width: '60%'
+        width: '60%',
+        marginTop: 20,
     },
     billFrom: {
-        marginTop: 20,
         paddingBottom: 3,
         fontFamily:'Open Sans',
+        fontSize:16,
         fontWeight:800      
     },
 });
 
-const BillFrom = ({ invoice }) => (
+const BillFrom = ({ invoice }) => {
+    return(
     <View style={styles.headerContainer}>
-        <Text  style={styles.billFrom}>SAMPADA TRAVELS</Text>
-        <Text>{invoice.fullname}</Text>
-        <Text>{invoice.address}</Text>
-        <Text>{invoice.phone}</Text>
-        <Text>{invoice.email}</Text>
+        <Text  style={styles.billFrom}>{invoice.company_name.toUpperCase()}</Text>
+        <Text>{invoice.user_name}</Text>
+        <Text>{invoice.user_mobile}</Text>
+        <Text>{invoice.user_email}</Text>
     </View>
-);
+    )
+};
 
 export default BillFrom;
