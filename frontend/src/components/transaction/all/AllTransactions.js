@@ -6,17 +6,19 @@ import Context from "../../../context/Context.js";
 import Loading from '../../Loading.js'
 import { CSVLink} from 'react-csv';
 import moment from "moment";
+import { Link, useNavigate } from "react-router-dom";
 
 function AllTransactions() {
   //used for pagination. skipcount used in mongo db skip()
   const [skipCount, setSkipCount] = useState(0)
   //used for pagination. limit number of documents fetched. used in mongo db limit()
-  const [documentLimit, setDocumentLimit] = useState(3)
+  const [documentLimit, setDocumentLimit] = useState(10)
   const [excelFullData, setExcelFullData] = useState([]);
   const [fliteredTransactions, setFilteredTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const {user, setUser} = useContext(Context)
   const csvRef = useRef();
+  const navigate = useNavigate();
 
   const generateDataForExcel = (transactions) =>{
     const data = transactions.map(item =>{
@@ -162,7 +164,7 @@ function AllTransactions() {
                   </thead>
                   <tbody class="bg-white divide-y divide-gray-200 ">
                     {fliteredTransactions.map((transaction) => (
-                      <tr className="hover:bg-gray-100 cursor-pointer">
+                      <tr onClick={()=>navigate(`/view/${transaction._id}`)} className="hover:bg-gray-100 cursor-pointer">
                         <td class="px-4 py-4 text-sm  text-gray-700  whitespace-nowrap">
                           <div class="inline-flex items-center gap-x-3">
                             <span>#{transaction._id}</span>
@@ -235,18 +237,10 @@ function AllTransactions() {
                   </tbody>
                 </table>
               </div>
-              <div class="flex items-center justify-between mt-6">
-        <button onClick={loadPrevious} href="#" class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-            </svg>
+              <div class=" w-full flex flex-row-reverse items-center justify-between mt-6">
+        
 
-            <span>
-                previous
-            </span>
-        </button>
-
-        <button onClick={loadNext} href="#" class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ">
+        <button onClick={loadNext} href="#" class="flex justify-self-end items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ">
             <span>
                 Next
             </span>
@@ -255,6 +249,16 @@ function AllTransactions() {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
             </svg>
         </button>
+
+        {skipCount>0 && <button onClick={loadPrevious} href="#" class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+            </svg>
+
+            <span>
+                previous
+            </span>
+        </button>}
     </div>
             </div>
           </div>

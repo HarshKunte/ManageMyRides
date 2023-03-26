@@ -93,7 +93,11 @@ export const getTransactions = asyncHandler(async (req, res)=>{
     if(!user){
         throw new CustomError('User not avaiable',401)
     }
-    const transactions = await Transaction.find({user: user._id}).skip(skip).limit(limit)
+    if(skip<0 || limit<0){
+        throw new CustomError('Skip or Limit count should not be less than 0',401)
+    }
+
+    const transactions = await Transaction.find({user: user._id}).sort({"createdAt":-1}).skip(skip).limit(limit)
 
     res.status(200).json({
         success: true,
