@@ -20,6 +20,12 @@ export async function getTransactionById(id){
     return await axios.get(`${API}/transaction/${id}`, config)
 }
 
+export async function getAllTransactions(limit, skipCount){
+    const token = isAuthenticated()
+    const config = {headers:{Authorization: `Bearer ${token}`}}
+    return await axios.get(`${API}/transactions/${limit}/${skipCount}`, config)
+}
+
 export async function deleteTransactionById(id){
     const token = isAuthenticated()
     const config = {headers:{Authorization: `Bearer ${token}`}}

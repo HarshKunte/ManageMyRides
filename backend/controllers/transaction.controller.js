@@ -2,7 +2,7 @@ import Transaction from '../models/transaction.schema.js'
 import asyncHandler from '../services/asyncHandler.js'
 import CustomError from '../services/customError.js'
 import { customAlphabet } from 'nanoid'
-const nanoid = customAlphabet('1234567890abcdefg', 12)
+const nanoid = customAlphabet('1234567890abcdefg', 8)
 
 export const createTransaction = asyncHandler( async (req, res)=>{ 
     const user = req.user
@@ -62,6 +62,7 @@ export const deleteTransactionById = asyncHandler(async (req, res)=>{
         message: "Transaction deleted with success",
     })
 })
+
 export const getTransactionById = asyncHandler(async (req, res)=>{
     const user = req.user
     const id = req.params.id
@@ -81,6 +82,23 @@ export const getTransactionById = asyncHandler(async (req, res)=>{
         success: true,
         message: "Transaction received with success",
         transaction,
+        user
+    })
+})
+
+export const getTransactions = asyncHandler(async (req, res)=>{
+    const user = req.user
+    const limit = req.params.limit
+    const skip = req.params.skip
+    if(!user){
+        throw new CustomError('User not avaiable',401)
+    }
+    const transactions = await Transaction.find({user: user._id}).skip(skip).limit(limit)
+
+    res.status(200).json({
+        success: true,
+        message: "Transactions received with success",
+        transactions,
         user
     })
 })
