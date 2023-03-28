@@ -153,6 +153,9 @@ transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
             },
             "total_transactions": {
               "$size": "$transactions"
+            },
+            "total_no_of_days": {
+              "$sum": "$transactions.no_of_days"
             }
           }
         },
