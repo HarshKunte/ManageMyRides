@@ -76,7 +76,7 @@ function NewTransaction() {
   };
 
   return (
-    <>
+    <section className="p-5 md:p-10">
     <h2 className="text-lg font-semibold mb-10 text-gray-700 capitalize">
           Add new transaction
         </h2>
@@ -90,7 +90,7 @@ function NewTransaction() {
       setError = {setError}
       clearErrors={clearErrors}
     />
-    </>
+    </section>
   );
 }
 

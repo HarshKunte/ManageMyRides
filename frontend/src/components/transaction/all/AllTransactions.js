@@ -89,16 +89,16 @@ function AllTransactions() {
   
 
   return (
-    <>
+    <section className="p-5 md:p-10 bg-gray-100 min-h-screen">
       <section class="container px-4 mx-auto">
         <div className="flex gap-x-3">
-      <button onClick={fetchAllTransactions} class="w-fit mb-5 flex items-center rounded-md border border-1 border-green-500 px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-2 hover:bg-green-100">
+      <button onClick={fetchAllTransactions} class="w-fit mb-5 flex items-center rounded-md border border-1 border-green-500 px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-2 hover:bg-white">
       <AiFillFileExcel className="w-4 h-4 text-green-500"/>
 
 <span className="hidden sm:block">Export All Data</span>
       </button>
 
-      <CSVLink data={generateDataForExcel(fliteredTransactions)} filename="Filtered Report" className="w-fit mb-5 flex items-center rounded-md border border-1 border-green-500 px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-2 hover:bg-green-100">
+      <CSVLink data={generateDataForExcel(fliteredTransactions)} filename="Filtered Report" className="w-fit mb-5 flex items-center rounded-md border border-1 border-green-500 px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-2 hover:bg-white">
       <AiFillFileExcel className="w-4 h-4 text-green-500"/>
 
 <span className="hidden sm:block">Export Table Data</span>
@@ -114,7 +114,7 @@ function AllTransactions() {
                     <tr>
                       <th
                         scope="col"
-                        class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 "
+                        class="py-3.5 px-4 text-sm font-medium text-left rtl:text-right text-gray-500 "
                       >
                         <div class="flex items-center gap-x-3">
                           <span>Txn ID</span>
@@ -123,40 +123,40 @@ function AllTransactions() {
 
                       <th
                         scope="col"
-                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 "
+                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
                       >
                         Customer
                       </th>
 
                       <th
                         scope="col"
-                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500"
+                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500"
                       >
                         Payment
                       </th>
 
                       <th
                         scope="col"
-                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 "
+                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
                       >
                         Mode
                       </th>
 
                       <th
                         scope="col"
-                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 "
+                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
                       >
                         No. of days
                       </th>
                       <th
                         scope="col"
-                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 "
+                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
                       >
                         Total Kms
                       </th>
                       <th
                         scope="col"
-                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 "
+                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
                       >
                         Total Amt.
                       </th>
@@ -164,7 +164,7 @@ function AllTransactions() {
                   </thead>
                   <tbody class="bg-white divide-y divide-gray-200 ">
                     {fliteredTransactions.map((transaction) => (
-                      <tr onClick={()=>navigate(`/view/${transaction._id}`)} className="hover:bg-gray-100 cursor-pointer">
+                      <tr onClick={()=>navigate(`/view/${transaction._id}`)} className="hover:bg-gray-100 bg-white cursor-pointer">
                         <td class="px-4 py-4 text-sm  text-gray-700  whitespace-nowrap">
                           <div class="inline-flex items-center gap-x-3">
                             <span>#{transaction._id}</span>
@@ -264,7 +264,7 @@ function AllTransactions() {
           </div>
         </div>
       </section>
-    </>
+    </section>
   );
 }
 

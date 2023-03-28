@@ -15,6 +15,7 @@ import { LoadScript } from "@react-google-maps/api";
 import { googleMapsApiData } from "./config";
 import EditTransaction from "./components/transaction/edit/EditTransaction";
 import AllTransactions from "./components/transaction/all/AllTransactions";
+import NotFound from "./components/transaction/NotFound";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               </PrivateRoute>
             }
           >
+            <Route path="/" element={<Home />} />
             <Route path="/add" element={<NewTransaction />} />
             <Route path="/transactions" element={<AllTransactions />} />
             <Route path="/view/:transactionId" element={<ViewTransaction />} />
@@ -42,7 +44,7 @@ function App() {
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/login" element={<LoginForm />} />
           </Route>
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
       <Toaster />

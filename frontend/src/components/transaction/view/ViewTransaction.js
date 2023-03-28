@@ -115,7 +115,7 @@ function ViewTransaction() {
     return <NotFound />;
   }
   return (
-    <>
+    <section className="p-5 md:p-10">
       <section className="p-2 flex flex-col md:px-5 py-0">
         <div class=" flex mb-5 sm:mb-10 self-end sm:self-start w-fit overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse  ">
         <Link to={`/edit/${transactionId}`}>
@@ -471,7 +471,7 @@ function ViewTransaction() {
           </div>
         </div>
       </section>
-    </>
+    </section>
   );
 }
 

@@ -85,7 +85,7 @@ function EditTransaction() {
   }
 
   return (
-    <>
+    <section className="p-5 md:p-10">
       <h2 className="text-lg font-semibold mb-10 text-gray-700 capitalize">
         Edit transaction
       </h2>
@@ -99,7 +99,7 @@ function EditTransaction() {
         setError={setError}
         clearErrors={clearErrors}
       />
-    </>
+    </section>
   );
 }
 

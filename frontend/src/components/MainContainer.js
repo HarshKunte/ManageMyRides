@@ -9,7 +9,7 @@ function MainContainer() {
   <div className="drawer-content col-span-5 lg:col-span-4">
     {/* <!-- Page content here --> */}
     <Navbar/>
-    <section className='p-5 md:p-10'>
+    <section className=''>
     <Outlet/>
     </section>
   </div> 
