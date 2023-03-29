@@ -151,6 +151,9 @@ transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
             "total_earnings": {
               "$sum": "$transactions.earnings"
             },
+            "total_bills_amt": {
+              "$sum": "$transactions.total_bill"
+            },
             "total_transactions": {
               "$size": "$transactions"
             },

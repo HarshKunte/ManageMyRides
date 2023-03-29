@@ -47,6 +47,14 @@ const userSchema = mongoose.Schema(
             type:Number,
             default:0
         },
+        total_bills_amt:{
+            type:Number,
+            default:0
+        },
+        total_no_of_days:{
+            type:Number,
+            default:0
+        },
         
     },
     {

@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { FaRupeeSign } from "react-icons/fa";
 import { AiFillCar } from "react-icons/ai";
+import Context from '../context/Context.js'
 import { TbLocationFilled,TbBrandDaysCounter } from "react-icons/tb";
+import { getUserDataApi } from "../helpers/user.helper.js";
+import toast from 'react-hot-toast'
 function Home() {
+  const {user, setUser} = useContext(Context)
+
+  const getUserData = () =>{
+      getUserDataApi()
+      .then(res =>{
+        if(res.data.success){
+          console.log(res.data.user);
+          setUser(res.data.user)
+        }
+      })
+      .catch(err =>{
+        console.log(err);
+        toast.error('Failed to receive user data')
+      })
+  }
+
+  useEffect(()=>{
+    if(!user)
+    getUserData()
+  },[])
+
   return (
     <section className="p-4 px-5 md:p-8 md:px-10 bg-gray-100 min-h-screen">
       <h2 className="text-3xl mb-10 font-semibold">Good morning, James!</h2>
