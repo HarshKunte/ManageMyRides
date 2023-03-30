@@ -125,6 +125,11 @@ const transactionSchema = mongoose.Schema(
 
 //method to calculate totals of kms, earnings, transactions and save to User Db
 transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
+   if(this.isModified('to_date') || this.isModified('from_date')){
+    this.from_date = new Date(this.from_date)
+    this.to_date = new Date(this.to_date)
+   }
+
     //if total_kms or earnings is not modified do nothing
     if(!this.isModified('total_kms') && !this.isModified('earnings')) return next()
 

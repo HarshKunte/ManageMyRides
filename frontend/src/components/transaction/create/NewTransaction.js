@@ -4,6 +4,7 @@ import NewTransactionForm from "./NewTransactionForm";
 import moment from 'moment'
 import {toast} from 'react-hot-toast'
 import { createTransaction } from "../../../helpers/transaction.helper";
+import { useNavigate } from "react-router-dom";
 function NewTransaction() {
   const initialState = {
     customer_name: "",
@@ -45,8 +46,10 @@ function NewTransaction() {
   } = useForm();
 
   const [state, setState] = useState(initialState);
+  const navigate = useNavigate()
 
   const submitData = () => {  
+    
     console.log(state);  
     if(state.from_address ===""){
       setError('from_address',{
@@ -66,6 +69,7 @@ function NewTransaction() {
     createTransaction(state)
     .then((res) =>{
        toast.success("Created successfully!!")
+       navigate(`/view/${res.data.transaction._id}`)
        setState(initialState)
     })
     .catch(err =>{

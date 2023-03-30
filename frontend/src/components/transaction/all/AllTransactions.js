@@ -37,6 +37,7 @@ function AllTransactions() {
     getAllTransactions(documentLimit, skipCount)
     .then((res)=>{
         if(res.data.success){
+          console.log(res.data.transactions);
             setFilteredTransactions(res.data.transactions)
             if(!user) setUser(res.data.user)
             setIsLoading(false)

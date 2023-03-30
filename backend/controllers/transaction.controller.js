@@ -10,6 +10,7 @@ export const createTransaction = asyncHandler( async (req, res)=>{
     if(!user){
         throw new CustomError('User not avaiable',401)
     }
+    
     const data = {user, _id: nanoid(), ...req.body}
     const transaction = await Transaction.create(data)
 
@@ -98,6 +99,46 @@ export const getTransactions = asyncHandler(async (req, res)=>{
     }
 
     const transactions = await Transaction.find({user: user._id}).sort({"createdAt":-1}).skip(skip).limit(limit)
+
+    res.status(200).json({
+        success: true,
+        message: "Transactions received with success",
+        transactions,
+        user
+    })
+})
+
+export const getTransactionsReport = asyncHandler(async (req, res)=>{
+    const user = req.user
+    if(!user){
+        throw new CustomError('User not avaiable',401)
+    }
+
+    const transactions = await Transaction.aggregate([
+        { 
+            $match: { _id: user._id } 
+        },
+        {
+            $group: {
+              _id: {
+                year: {
+                  $year: "$to_date"
+                  },
+                month: {
+                  $month: "$to_date"
+                  },
+                  
+                },
+              total_earnings_month: {
+                $sum: "$earnings"
+              },
+              total_kms_month: {
+                $sum: "$total_kms"
+              },
+              
+            }
+          }
+    ])
 
     res.status(200).json({
         success: true,

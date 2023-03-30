@@ -288,7 +288,7 @@ function NewTransactionForm({
                 {...register("from_date", {
                   required: "Date is required",
                 })}
-                value={moment.utc(state.from_date).format('YYYY-MM-DD')}
+                value={state.from_date? moment.utc(state.from_date).format('YYYY-MM-DD'):""}
                 onChange={handleChange}
               />
             </div>
@@ -307,12 +307,12 @@ function NewTransactionForm({
                 placeholder=""
                 name="to_date"
                 className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
-                min={moment.utc(state.from_date).format('YYYY-MM-DD')}
+                min={state.from_date? moment.utc(state.from_date).format('YYYY-MM-DD'):""}
                 max={moment().format("YYYY-MM-DD")}
                 {...register("to_date", {
                   required: "Date is required",
                 })}
-                value={moment.utc(state.to_date).format('YYYY-MM-DD')}
+                value={state.to_date? moment.utc(state.to_date).format('YYYY-MM-DD'): ""}
                 onChange={handleChange}
               />
             </div>
