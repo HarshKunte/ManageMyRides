@@ -98,7 +98,7 @@ export const getTransactions = asyncHandler(async (req, res)=>{
         throw new CustomError('Skip or Limit count should not be less than 0',401)
     }
 
-    const transactions = await Transaction.find({user: user._id}).sort({"createdAt":-1}).skip(skip).limit(limit)
+    const transactions = await Transaction.find({user: user._id}).sort({"to_date":-1}).skip(skip).limit(limit)
 
     res.status(200).json({
         success: true,
@@ -114,9 +114,9 @@ export const getTransactionsReport = asyncHandler(async (req, res)=>{
         throw new CustomError('User not avaiable',401)
     }
 
-    const transactions = await Transaction.aggregate([
+    const report = await Transaction.aggregate([
         { 
-            $match: { _id: user._id } 
+            $match: { user: user._id } 
         },
         {
             $group: {
@@ -143,7 +143,7 @@ export const getTransactionsReport = asyncHandler(async (req, res)=>{
     res.status(200).json({
         success: true,
         message: "Transactions received with success",
-        transactions,
+        report,
         user
     })
 })

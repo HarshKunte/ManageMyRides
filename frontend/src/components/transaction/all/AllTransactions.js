@@ -6,7 +6,7 @@ import Context from "../../../context/Context.js";
 import Loading from '../../Loading.js'
 import { CSVLink} from 'react-csv';
 import moment from "moment";
-import { Link, useNavigate } from "react-router-dom";
+import TransactionsTable from "../TransactionsTable";
 
 function AllTransactions() {
   //used for pagination. skipcount used in mongo db skip()
@@ -14,11 +14,10 @@ function AllTransactions() {
   //used for pagination. limit number of documents fetched. used in mongo db limit()
   const [documentLimit, setDocumentLimit] = useState(10)
   const [excelFullData, setExcelFullData] = useState([]);
-  const [fliteredTransactions, setFilteredTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const {user, setUser} = useContext(Context)
+  const {user, setUser, transactions, setTransactions} = useContext(Context)
   const csvRef = useRef();
-  const navigate = useNavigate();
 
   const generateDataForExcel = (transactions) =>{
     const data = transactions.map(item =>{
@@ -37,7 +36,7 @@ function AllTransactions() {
     getAllTransactions(documentLimit, skipCount)
     .then((res)=>{
         if(res.data.success){
-          console.log(res.data.transactions);
+            setTransactions(res.data.transactions);
             setFilteredTransactions(res.data.transactions)
             if(!user) setUser(res.data.user)
             setIsLoading(false)
@@ -99,7 +98,7 @@ function AllTransactions() {
 <span className="hidden sm:block">Export All Data</span>
       </button>
 
-      <CSVLink data={generateDataForExcel(fliteredTransactions)} filename="Filtered Report" className="w-fit mb-5 flex items-center rounded-md border border-1 border-green-500 px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-2 hover:bg-white">
+      <CSVLink data={generateDataForExcel(filteredTransactions)} filename="Filtered Report" className="w-fit mb-5 flex items-center rounded-md border border-1 border-green-500 px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-2 hover:bg-white">
       <AiFillFileExcel className="w-4 h-4 text-green-500"/>
 
 <span className="hidden sm:block">Export Table Data</span>
@@ -109,135 +108,9 @@ function AllTransactions() {
         <div class="flex flex-col">
           <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-              <div class="overflow-hidden border border-gray-200  md:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200 ">
-                  <thead class="bg-gray-50 ">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="py-3.5 px-4 text-sm font-medium text-left rtl:text-right text-gray-500 "
-                      >
-                        <div class="flex items-center gap-x-3">
-                          <span>Txn ID</span>
-                        </div>
-                      </th>
-
-                      <th
-                        scope="col"
-                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
-                      >
-                        Customer
-                      </th>
-
-                      <th
-                        scope="col"
-                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500"
-                      >
-                        Payment
-                      </th>
-
-                      <th
-                        scope="col"
-                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
-                      >
-                        Mode
-                      </th>
-
-                      <th
-                        scope="col"
-                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
-                      >
-                        No. of days
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
-                      >
-                        Total Kms
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-4 py-3.5 text-sm font-medium text-left rtl:text-right text-gray-500 "
-                      >
-                        Total Amt.
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="bg-white divide-y divide-gray-200 ">
-                    {fliteredTransactions.map((transaction) => (
-                      <tr onClick={()=>navigate(`/view/${transaction._id}`)} className="hover:bg-gray-100 bg-white cursor-pointer">
-                        <td class="px-4 py-4 text-sm  text-gray-700  whitespace-nowrap">
-                          <div class="inline-flex items-center gap-x-3">
-                            <span>#{transaction._id}</span>
-                          </div>
-                        </td>
-                        <td class="px-4 py-4 text-sm text-gray-700  whitespace-nowrap">
-                          {transaction.customer_name}
-                        </td>
-                        {transaction.payment_received === "yes" && (
-                          <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                            <div class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60">
-                              <svg
-                                width="12"
-                                height="12"
-                                viewBox="0 0 12 12"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M10 3L4.5 8.5L2 6"
-                                  stroke="currentColor"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                              </svg>
-
-                              <h2 class="text-sm font-normal">Paid</h2>
-                            </div>
-                          </td>
-                        )}
-                        {transaction.payment_received === "no" && (
-                          <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                            <div class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-red-500 bg-red-100/60">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke-width="1.5"
-                                  stroke="currentColor"
-                                  class="-ml-1 mr-1.5 h-4 w-4"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                                  />
-                                </svg>
-
-                              <h2 class="text-sm font-normal">Pending</h2>
-                            </div>
-                          </td>
-                        )}
-                        <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                            <div class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-violet-500 bg-violet-100/60">
-                              <h2 class="text-sm font-normal">{transaction.ride_mode}</h2>
-                            </div>
-                          </td>
-                          <td class="px-4 py-4 text-sm text-gray-700  whitespace-nowrap">
-                          {transaction.no_of_days}
-                        </td>
-                          <td class="px-4 py-4 text-sm text-gray-700  whitespace-nowrap">
-                          {transaction.total_kms}
-                        </td>
-                          <td class="px-4 py-4 text-sm text-gray-700  whitespace-nowrap">
-                          {transaction.total_bill}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+               <TransactionsTable data={filteredTransactions}/>
+               </div>
+               </div>
               <div class=" w-full flex flex-row-reverse items-center justify-between mt-6">
         
 
@@ -261,8 +134,7 @@ function AllTransactions() {
             </span>
         </button>}
     </div>
-            </div>
-          </div>
+            
         </div>
       </section>
     </section>

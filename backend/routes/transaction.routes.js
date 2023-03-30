@@ -17,7 +17,7 @@ router.delete('/transaction/:id', isLoggedIn, deleteTransactionById);
 router.get('/transactions/:limit/:skip', isLoggedIn, getTransactions);
 
 //get analytics of all transactions for the logged in user
-router.get('/transactions/reports', isLoggedIn, getTransactionsReport);
+router.get('/transactions/report', isLoggedIn, getTransactionsReport);
 
 
 export default router

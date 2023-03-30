@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState();
   const [user, setUser] = useState();
   const [viewingTransaction, setViewingTransaction] = useState();
 
