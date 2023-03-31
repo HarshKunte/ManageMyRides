@@ -41,3 +41,15 @@ export const login = async (data) =>{
             return res
         })       
 }
+
+export const logout = async () =>{
+        return await axios.post(`${API}/auth/logout`)
+        .then(res => {
+            if(res.data?.success){
+                if (typeof window !== "undefined") {
+                    localStorage.removeItem("jwt")
+                }
+            }
+            return res
+        })       
+}

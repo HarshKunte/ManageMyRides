@@ -171,7 +171,6 @@ export const resetPassword = asyncHandler(async (req, res) => {
 export const changePassword = asyncHandler(async(req,res) => {
     const {oldPassword, newPassword} = req.body;
     const user = req.user;
-    console.log(user);
 
     if(oldPassword === newPassword){
         throw new CustomError("Old and new password shouldn't be same", 401)
