@@ -16,6 +16,7 @@ function NewTransactionForm({
   setState,
   setError,
   clearErrors,
+  isSaving
 }) {
   const [directionsResponse, setDirectionsResponse] = useState();
   //testing
@@ -836,10 +837,18 @@ function NewTransactionForm({
           </div>
 
           <div className="flex mt-6">
-            <button
+            <button disabled={isSaving}
               onClick={handleSubmit(submitData)}
-              className="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              className="flex items-center gap-x-2 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
             >
+              {isSaving &&<div
+        class="inline-block h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status"
+      >
+        <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+          Loading...
+        </span>
+      </div>}
               Save
             </button>
           </div>

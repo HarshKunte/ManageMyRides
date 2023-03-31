@@ -46,6 +46,7 @@ function NewTransaction() {
   } = useForm();
 
   const [state, setState] = useState(initialState);
+  const [isSaving, setIsSaving] = useState(false)
   const navigate = useNavigate()
 
   const submitData = () => {  
@@ -66,13 +67,16 @@ function NewTransaction() {
       return
     }
 
+    setIsSaving(true)
     createTransaction(state)
     .then((res) =>{
+      setIsSaving(prev => !prev)
        toast.success("Created successfully!!")
        navigate(`/view/${res.data.transaction._id}`)
        setState(initialState)
     })
     .catch(err =>{
+      setIsSaving(prev => !prev)
       console.log(err);
     })
 

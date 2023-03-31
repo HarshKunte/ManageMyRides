@@ -1,8 +1,34 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import { toast } from 'react-hot-toast';
+import { getUserDataApi } from '../helpers/user.helper';
+import Context from '../context/Context';
+import Loading from './Loading';
 function MainContainer() {
+  const { user, setUser } = useContext(Context);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      getUserDataApi()
+        .then((res) => {
+          setUser(res.data.user);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Failed to receive data");
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
     return ( <>
         <div className="drawer drawer-mobile grid-cols-5">
   <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

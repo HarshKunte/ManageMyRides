@@ -7,3 +7,9 @@ export const getUserDataApi = async () =>{
     const config = {headers:{Authorization: `Bearer ${token}`}}
     return await  axios.get(`${API}/user`, config)
 }
+
+export const editUserData = async (data) =>{
+    const token = isAuthenticated()
+    const config = {headers:{Authorization: `Bearer ${token}`}}
+    return await  axios.put(`${API}/user`,data, config)
+}

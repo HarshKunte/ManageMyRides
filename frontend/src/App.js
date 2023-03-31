@@ -16,6 +16,9 @@ import { googleMapsApiData } from "./config";
 import EditTransaction from "./components/transaction/edit/EditTransaction";
 import AllTransactions from "./components/transaction/all/AllTransactions";
 import NotFound from "./components/transaction/NotFound";
+import UserDetails from "./components/user/UserDetails";
+import EditUserDetails from "./components/user/EditUseDetails";
+import ChangePassword from "./components/user/ChangePassword";
 
 function App() {
   return (
@@ -39,6 +42,9 @@ function App() {
             <Route path="/transactions" element={<AllTransactions />} />
             <Route path="/view/:transactionId" element={<ViewTransaction />} />
             <Route path="/edit/:transactionId" element={<EditTransaction />} />
+            <Route path="/user/details" element={<UserDetails />} />
+            <Route path="/user/details/edit" element={<EditUserDetails />} />
+            <Route path="/user/change_password" element={<ChangePassword />} />
           </Route>
           <Route path="/" element={<LoginSignup />}>
             <Route path="/signup" element={<SignupForm />} />
