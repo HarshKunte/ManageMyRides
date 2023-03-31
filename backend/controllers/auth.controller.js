@@ -185,7 +185,7 @@ export const changePassword = asyncHandler(async(req,res) => {
     const isOldPasswordMatched = await dbUser.comparePassword(oldPassword)
 
     if(!isOldPasswordMatched){
-        throw new CustomError("Old password does not match", 400)
+        throw new CustomError("Incorrect old password!", 400)
     }
 
     dbUser.password = newPassword;

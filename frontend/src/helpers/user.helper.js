@@ -13,3 +13,9 @@ export const editUserData = async (data) =>{
     const config = {headers:{Authorization: `Bearer ${token}`}}
     return await  axios.put(`${API}/user`,data, config)
 }
+
+export const changePassword = async (data) =>{
+    const token = isAuthenticated()
+    const config = {headers:{Authorization: `Bearer ${token}`}}
+    return await axios.post(`${API}/auth/password/change`, data, config)
+}
