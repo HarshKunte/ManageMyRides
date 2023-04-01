@@ -98,7 +98,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
 
     const user = await User.findOne({email})
     if(!user){
-        throw new CustomError('User not found', 404)
+        throw new CustomError('User email not found', 404)
     }
 
     const resetToken = user.generateForgotPasswordToken()
@@ -106,7 +106,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
     //save the token to the db
     await user.save({validateBeforeSave: false})
 
-    const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/password/reset/${resetToken}`
+    const resetUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`
     const text = `Your password reset url is
     \n\n ${resetUrl}\n\n
     `

@@ -101,6 +101,7 @@ function LoginForm() {
                       value={state.password}
             onChange={handleChange}
                   />
+                  <Link to='/password/forgot' className='text-xs text-gray-600 underline underline-offset-2 cursor-pointer'>Forgot password</Link>
                   {errors.password && (
             <p className="text-xs  text-red-500">{errors.password.message}</p>
           )}

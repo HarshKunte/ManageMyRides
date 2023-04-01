@@ -31,6 +31,14 @@ export const signup = async (data) =>{
         return await axios.post(`${API}/auth/signup`, data)       
 }
 
+export const forgotPassword = async (email) =>{
+        return await axios.post(`${API}/auth/password/forgot`, {email})       
+}
+
+export const resetPassword = async (token,password, confirmPassword) =>{
+        return await axios.post(`${API}/auth/password/reset/${token}`, {password, confirmPassword})       
+}
+
 export const login = async (data) =>{
         return await axios.post(`${API}/auth/login`, data)
         .then(res => {

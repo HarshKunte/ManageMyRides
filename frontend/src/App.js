@@ -19,6 +19,8 @@ import NotFound from "./components/transaction/NotFound";
 import UserDetails from "./components/user/UserDetails";
 import EditUserDetails from "./components/user/EditUseDetails";
 import ChangePassword from "./components/user/ChangePassword";
+import ForgotPass from "./components/auth/ForgotPass";
+import ResetPassword from "./components/auth/ResetPassword";
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
           <Route path="/" element={<LoginSignup />}>
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/login" element={<LoginForm />} />
+            <Route path="/password/forgot" element={<ForgotPass />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

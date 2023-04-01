@@ -141,8 +141,7 @@ function Sidebar() {
 
                 <span className="text-sm font-medium"> Details </span>
               </Link>
-            </nav>
-            <button
+              <button
                 onClick={logOut}
                 type="button"
                 className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
@@ -164,6 +163,8 @@ function Sidebar() {
 
                 <span className="text-sm font-medium"> Logout </span>
               </button>
+            </nav>
+            
           </details>
         </nav>
       </div>
