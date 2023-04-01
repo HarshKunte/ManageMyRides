@@ -67,7 +67,6 @@ function ViewTransaction() {
     if(data){
       //set invoice data
       let invoice = generateInvoiceData(user,data)
-      console.log(invoice);
       setInvoiceData(invoice)
     }
   }, [data]);

@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-import { Page, Document, StyleSheet, Font, Text } from "@react-pdf/renderer";
+import { Page, Document, StyleSheet, Font, Text, View } from "@react-pdf/renderer";
 
 import InvoiceTitle from "./InvoiceTitle";
 import InvoiceNo from "./InvoiceNo";
 import BillTo from "./BillTo";
 import InvoiceThankYouMsg from "./InvoiceThankYouMsg";
 import InvoiceItemsTable from "./InvoiceItemsTable";
+import FromInfo from "./FromInfo";
+import ToInfo from "./ToInfo";
 Font.register({
     family: 'Open Sans',
     fonts: [
@@ -45,7 +47,11 @@ const PdfDocument = ({ invoicedata }) => {
             <Page size="A4" style={styles.page} >
                 <InvoiceTitle title={'Invoice'} />
                 <InvoiceNo invoice={invoicedata} />
+                <View style={{display:'flex',flexDirection:'row',rowGap:15, width:'100%'}} >
                 <BillTo invoice={invoicedata} />
+                <FromInfo invoice={invoicedata} />
+                <ToInfo invoice={invoicedata} />
+                </View>
                 <InvoiceItemsTable invoice={invoicedata} />
                 <InvoiceThankYouMsg />
             </Page>

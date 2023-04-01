@@ -11,17 +11,11 @@ export const generateInvoiceData = (user, transaction) => {
     customer_name: transaction.customer_name,
     customer_mobile: transaction.customer_mobile,
     total: transaction.total_bill,
+    from_date:moment(transaction.from_date).utc().format("DD-MM-YYYY"),
+    to_date:moment(transaction.from_date).utc().format("DD-MM-YYYY"),
+    from_location: transaction.from_address,
+    to_location: transaction.to_address,
     items: [
-      {
-        sno: 1,
-        desc: "Journey Start Date",
-        qty: moment(transaction.from_date).utc().format("DD-MM-YYYY"),
-      },
-      {
-        sno: 2,
-        desc: "Journey End Date",
-        qty: moment(transaction.to_date).utc().format("DD-MM-YYYY"),
-      },
       {
         sno: 3,
         desc: "No. of days",

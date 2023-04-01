@@ -38,7 +38,7 @@ const InvoiceTableFooter = ({ invoice }) => {
     return (
         <View style={styles.row}>
             <Text style={styles.description}>TOTAL</Text>
-            <Text style={styles.total}>{invoice?.total}</Text>
+            <Text style={styles.total}>{invoice?.total} Rs.</Text>
         </View>
     )
 };

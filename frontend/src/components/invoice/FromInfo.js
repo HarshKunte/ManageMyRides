@@ -5,7 +5,8 @@ const styles = StyleSheet.create({
     headerContainer: {
         marginTop: 2,
         justifyContent: 'flex-start',
-        width: '25%'
+        width: '35%',
+        marginRight:'3%'
     },
     billTo: {
         marginTop: 18,
@@ -16,12 +17,12 @@ const styles = StyleSheet.create({
     },
 });
 
-const BillTo = ({ invoice }) => (
+const FromInfo = ({ invoice }) => (
     <View style={styles.headerContainer}>
-        <Text style={styles.billTo}>Bill To:</Text>
-        <Text>{invoice.customer_name}</Text>
-        <Text>{invoice.customer_mobile}</Text>
+        <Text style={styles.billTo}>Journey Start:</Text>
+        <Text>{invoice.from_location}</Text>
+        <Text>Date: {invoice.from_date}</Text>
     </View>
 );
 
-export default BillTo;
+export default FromInfo;
