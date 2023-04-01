@@ -1,8 +1,10 @@
 import moment from "moment";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import Context from "../../context/Context";
 function TransactionsTable({ data }) {
   const navigate = useNavigate();
+  const {setViewingTransaction} = useContext(Context);
   return (
     <div class="overflow-hidden border border-gray-200  md:rounded-lg">
       <table class="min-w-full divide-y divide-gray-200 ">
@@ -53,7 +55,7 @@ function TransactionsTable({ data }) {
         <tbody class="bg-white divide-y divide-gray-200 ">
           {data.map((transaction) => (
             <tr
-              onClick={() => navigate(`/view/${transaction._id}`)}
+              onClick={() => { setViewingTransaction(null); navigate(`/view/${transaction._id}`)}}
               className="hover:bg-gray-100 bg-white cursor-pointer"
             >
               <td class="px-4 py-4 text-sm text-gray-700  whitespace-nowrap">

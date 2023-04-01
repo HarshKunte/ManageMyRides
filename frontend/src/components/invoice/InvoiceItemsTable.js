@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 const InvoiceItemsTable = ({ invoice }) => (
     <View style={styles.tableContainer}>
         <InvoiceTableHeader />
-        <InvoiceTableRow items={invoice.items} />
+        <InvoiceTableRow invoice={invoice} />
         <InvoiceTableFooter invoice={invoice} />
     </View>
 );

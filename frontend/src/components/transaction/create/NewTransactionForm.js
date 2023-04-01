@@ -2,8 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { rideModes, fuelModes, paymentModes } from "../../../util/enums.js";
-import { Autocomplete, LoadScript } from "@react-google-maps/api";
-import { googleMapsApiData } from "../../../config/index.js";
+import { Autocomplete } from "@react-google-maps/api";
 import { getDirectionsResponse } from "../../../helpers/map.helper.js";
 import Map from "../../Map.js";
 
@@ -39,13 +38,21 @@ function NewTransactionForm({
   };
 
   const handleChange = (e) => {
-    console.log(e.target.value);
     let value =
       e.target.type == "number" ? Number(e.target.value) : e.target.value;
-    setState((prevState) => ({
-      ...prevState,
-      [e.target.name]: value,
-    }));
+      if(e.target.type === "checkbox"){
+        setState((prevState) => ({
+          ...prevState,
+          [e.target.name]: !prevState[e.target.name],
+        }))
+      }
+      else{
+        setState((prevState) => ({
+          ...prevState,
+          [e.target.name]: value,
+        }));
+      }
+    
     if(e.target.name=='from_date' || e.target.name =='to_date'){
       if(state.to_date && (e.target.name=='from_date'&& value>state.to_date) || (e.target.name =='to_date' &&value<state.from_date)){
         setError('to_date',{
@@ -75,6 +82,15 @@ function NewTransactionForm({
         }));
       }
     }
+    if (e.target.name === "fuel_required" || e.target.name === "fuel_rate") {
+      let expense;
+      if(e.target.name === "fuel_required") expense = value * state.fuel_rate
+      if(e.target.name === "fuel_rate") expense = value * state.fuel_required
+      setState(prevState =>({
+        ...prevState,
+      "fuel_expense": expense,
+      }))
+    }
     if (e.target.name==="payment_received") {
         if (value ==="yes" && state.pending_payment_amt>0) {
           setState(prevState =>({
@@ -98,12 +114,6 @@ function NewTransactionForm({
         }));
       }
     }
-    if (e.target.type == "checkbox") {
-      setState((prevState) => ({
-        ...prevState,
-        [e.target.name]: value === "on" ? true : false,
-      }));
-    }
   };
 
   const onPlaceChanged = async () => {
@@ -111,8 +121,6 @@ function NewTransactionForm({
       return;
     }
     try {
-      console.log(inputRef1.current.value);
-      console.log(inputRef2.current.value);
       setState(prevState => ({
         ...prevState,
         from_address: inputRef1.current.value,
@@ -380,7 +388,7 @@ function NewTransactionForm({
               <input
                 name="round_trip"
                 type="checkbox"
-                defaultChecked={state.round_trip}
+                checked={state.round_trip}
                 onChange={handleChange}
                 className="checkbox mr-2"
               />
@@ -413,7 +421,24 @@ function NewTransactionForm({
                 />
               </div>
             </div>
-            <div className="col-span-2 lg:col-span-1">
+            <div className="col-span-4 mt-5 md:col-span-6 xl:col-span-9 flex items-center">
+              <input
+                name="charged_lumpsum"
+                type="checkbox"
+                defaultChecked={state.charged_lumpsum}
+                onChange={handleChange}
+                className="checkbox mr-2"
+              />
+              <label
+                htmlFor="round_trip"
+                className="block text-gray-700 text-base"
+              >Charged Lumpsum
+                <span className="ml-2 text-xs">
+                 (For trips charged lumpsum without Kms calculations)</span>
+              </label>
+            </div>
+            
+            {!state.charged_lumpsum && <div className="col-span-2 lg:col-span-2 xl:col-span-1">
               <label
                 htmlFor="starting_kms"
                 className="block text-gray-700 text-sm"
@@ -429,8 +454,8 @@ function NewTransactionForm({
                 value={state.starting_kms}
                 onChange={handleChange}
               />
-            </div>
-            <div className="flex flex-col justify-center col-span-2 lg:col-span-2">
+            </div>}
+            {!state.charged_lumpsum && <div className="flex flex-col justify-center col-span-2 lg:col-span-2">
               <label
                 htmlFor="closing_kms"
                 className="block text-gray-700 text-sm"
@@ -450,8 +475,8 @@ function NewTransactionForm({
                   {errors.closing_kms.message}
                 </p>
               )}
-            </div>
-            <div className="flex col-span-4 md:col-span-2 lg:col-span-3 xl:col-span-1 flex-col justify-center">
+            </div>}
+            {!state.charged_lumpsum &&  <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 flex-col justify-center">
               <label
                 htmlFor="total_kms"
                 className="block text-gray-700 text-sm"
@@ -467,8 +492,8 @@ function NewTransactionForm({
                 value={state.total_kms}
                 onChange={handleChange}
               />
-            </div>
-            <div className="flex flex-col justify-center col-span-2 xl:col-span-1">
+            </div>}
+            {!state.charged_lumpsum && <div className="flex flex-col justify-center col-span-2 lg:col-span-3 xl:col-span-2">
               <label
                 htmlFor="rate_per_km"
                 className="block text-gray-700 text-sm"
@@ -484,8 +509,8 @@ function NewTransactionForm({
                 value={state.rate_per_km}
                 onChange={handleChange}
               />
-            </div>
-            <div className="flex flex-col justify-center col-span-2 lg:col-span-1">
+            </div>}
+            {!state.charged_lumpsum && <div className="flex flex-col justify-center col-span-2 lg:col-span-3 xl:col-span-2">
               <label
                 htmlFor="rate_per_hr"
                 className="block text-gray-700 text-sm"
@@ -501,7 +526,7 @@ function NewTransactionForm({
                 value={state.rate_per_hr}
                 onChange={handleChange}
               />
-            </div>
+            </div>}
             <div className="flex col-span-4 md:col-span-2 flex-col justify-center">
               <label
                 htmlFor="driver_allowance"
@@ -519,38 +544,8 @@ function NewTransactionForm({
                 onChange={handleChange}
               />
             </div>
-            <div className="col-span-2 md:col-span-1 hidden xl:block"></div>
-            <div className="col-span-2 md:col-span-1">
-              <label
-                htmlFor="ride_mode"
-                className="block text-gray-700 text-sm"
-              >
-                Journey via<span className="text-red-500">*</span>
-              </label>
-              <select
-                name="ride_mode"
-                {...register("ride_mode", {
-                  required: "Required",
-                })}
-                onChange={handleChange}
-                className="select select-bordered border-gray-200 w-full"
-              >
-                <option disabled selected>
-                  Select
-                </option>
-                {Object.keys(rideModes).map((mode) => (
-                  <option key={mode} selected={state.ride_mode===rideModes[mode]} value={rideModes[mode]}>
-                    {rideModes[mode]}
-                  </option>
-                ))}
-              </select>
-              {errors.ride_mode && (
-                <p className="text-xs  text-red-500">
-                  {errors.ride_mode.message}
-                </p>
-              )}
-            </div>
-            <div className="col-span-2 md:col-span-1">
+            
+            <div className="col-span-2 md:col-span-2 lg:col-span-2 xl:col-span-1">
               <label
                 htmlFor="fuel_mode"
                 className="block text-gray-700 text-sm"
@@ -621,7 +616,56 @@ function NewTransactionForm({
               {state.fuel_mode && <span className="">{`/${fuelModes[state.fuel_mode].unit}`}</span>}
               </label>
             </div>
-            <div className="col-span-2 lg:col-span-1">
+            <div className="col-span-2 lg:col-span-2">
+              <label
+                htmlFor="fuel_expense"
+                className="block text-gray-700 text-sm"
+              >
+                Fuel Expense (Rs.)
+              </label>
+              <label className="input-group mt-2">
+              <input
+                name="fuel_expense"
+                type="number"
+                className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
+                min={0}
+                defaultValue={(state.fuel_rate &&state.fuel_required)? (Math.round(state.fuel_rate * state.fuel_required * 100) / 100).toFixed(2)  : state.fuel_expense}
+                value={(state.fuel_rate &&state.fuel_required)? (Math.round(state.fuel_rate * state.fuel_required * 100) / 100).toFixed(2)  : state.fuel_expense}
+                onChange={handleChange}
+              />
+              </label>
+            </div>
+            <div className="col-span-2 md:col-span-2 lg:col-span-1">
+              <label
+                htmlFor="ride_mode"
+                className="block text-gray-700 text-sm"
+              >
+                Journey via<span className="text-red-500">*</span>
+              </label>
+              <select
+                name="ride_mode"
+                {...register("ride_mode", {
+                  required: "Required",
+                })}
+                onChange={handleChange}
+                className="select select-bordered border-gray-200 w-full"
+              >
+                <option disabled selected>
+                  Select
+                </option>
+                {Object.keys(rideModes).map((mode) => (
+                  <option key={mode} selected={state.ride_mode===rideModes[mode]} value={rideModes[mode]}>
+                    {rideModes[mode]}
+                  </option>
+                ))}
+              </select>
+              {errors.ride_mode && (
+                <p className="text-xs  text-red-500">
+                  {errors.ride_mode.message}
+                </p>
+              )}
+            </div>
+            <div className="col-span-2 lg:col-span-2">
               <label htmlFor="toll_amt" className="block text-gray-700 text-sm">
                 Toll amt (Rs.)
               </label>
@@ -635,7 +679,7 @@ function NewTransactionForm({
                 onChange={handleChange}
               />
             </div>
-            <div className="col-span-2 lg:col-span-1">
+            <div className="col-span-2 lg:col-span-2 xl:col-span-1">
               <label htmlFor="tax_amt" className="block text-gray-700 text-sm">
                 GST (Rs.)
               </label>

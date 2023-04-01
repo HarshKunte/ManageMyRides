@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,10 +9,12 @@ import {
 } from "../../../helpers/transaction.helper";
 import Loading from "../../Loading";
 import NewTransactionForm from "../create/NewTransactionForm";
+import Context from "../../../context/Context";
 function EditTransaction() {
   const [state, setState] = useState();
   const [directionsResponse, setDirectionsResponse] = useState();
   const { transactionId } = useParams();
+  const { setViewingTransaction } = useContext(Context);
   const navigate = useNavigate();
 
   const {
@@ -67,6 +69,7 @@ function EditTransaction() {
       .then((res) => {
         if (res.data?.success) {
           let id = res.data.transaction._id;
+          setViewingTransaction(null)
           navigate(`/view/${id}`);
         }
       })

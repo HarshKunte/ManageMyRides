@@ -8,13 +8,20 @@ import InvoiceThankYouMsg from "./InvoiceThankYouMsg";
 import InvoiceItemsTable from "./InvoiceItemsTable";
 import FromInfo from "./FromInfo";
 import ToInfo from "./ToInfo";
+import font from '../../fonts/Devnagri.ttf'
 Font.register({
     family: 'Open Sans',
     fonts: [
     { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
     { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-700.ttf', fontWeight: 700 }
     ]
-    });
+    },
+    {
+        family: 'Tiro Devanagari Hindi',
+        fonts: [
+        { src: font}
+        ]
+        });
 const styles = StyleSheet.create({
     page: {
         backgroundColor: '#fff',

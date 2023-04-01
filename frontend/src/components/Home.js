@@ -44,7 +44,8 @@ function Home() {
         p1._id.month < p2._id.month ? -1 : p1._id.month > p2._id.month ? 1 : 0
       )
       .filter((item) => item._id.year === new Date().getFullYear());
-    const labels = sortedByMonth.map((item) => months[item._id.month]);
+      console.log(sortedByMonth);
+    const labels = sortedByMonth.map((item) => months[(item._id.month)-1]);
     const earningsData = sortedByMonth.map((item) => item.total_earnings_month);
     const kmsData = sortedByMonth.map((item) => item.total_kms_month);
     setEarningsChartData({ labels, data: earningsData });

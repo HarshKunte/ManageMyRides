@@ -34,6 +34,7 @@ function AllTransactions() {
         fuel_mode,
         fuel_required,
         fuel_rate,
+        fuel_expense,
         ...rest
       } = item;
       const newFromDate = moment(from_date).utc().format("DD-MM-YYYY");
@@ -52,6 +53,7 @@ function AllTransactions() {
         fuel_mode,
         fuel_required,
         fuel_rate,
+        fuel_expense
       };
     });
     console.log(data);

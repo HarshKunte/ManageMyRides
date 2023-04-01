@@ -25,13 +25,20 @@ const styles = StyleSheet.create({
     },
 });
 
-const InvoiceTableRow = ({ items }) => {
-    const rows = items.map(item =>
+const InvoiceTableRow = ({invoice}) => {
+    const rows = invoice.items.map(item =>{
+        if(item.sno === 2 && invoice.charged_lumpsum){
+            return
+        }
+        if(item.sno === 6 && !invoice.charged_lumpsum){
+            return
+        }
+        return(
         <View style={styles.row} key={item.sno.toString()}>
             <Text style={styles.description}>{item.desc}</Text>
             <Text style={styles.amount}>{item.qty}</Text>
-        </View>
-    );
+        </View>)
+});
     return (<Fragment>{rows}</Fragment>)
 };
 

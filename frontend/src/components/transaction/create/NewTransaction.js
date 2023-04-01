@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import NewTransactionForm from "./NewTransactionForm";
 import moment from 'moment'
 import {toast} from 'react-hot-toast'
 import { createTransaction } from "../../../helpers/transaction.helper";
 import { useNavigate } from "react-router-dom";
+import Context from "../../../context/Context";
 function NewTransaction() {
   const initialState = {
     customer_name: "",
@@ -16,6 +17,7 @@ function NewTransaction() {
     from_address: "",
     to_address: "",
     round_trip: false,
+    charged_lumpsum: false,
     starting_kms: 0,
     closing_kms: 0,
     total_kms: 0,
@@ -25,7 +27,7 @@ function NewTransaction() {
     ride_mode: "",
     fuel_mode: "",
     fuel_required: 0,
-    fuel_required: 0,
+    fuel_expense: 0,
     fuel_rate: 0,
     toll_amt: 0,
     tax_amt: 0,
@@ -47,6 +49,7 @@ function NewTransaction() {
 
   const [state, setState] = useState(initialState);
   const [isSaving, setIsSaving] = useState(false)
+  const {setTransactions, setViewingTransaction} = useContext(Context)
   const navigate = useNavigate()
 
   const submitData = () => {  
@@ -71,6 +74,8 @@ function NewTransaction() {
     createTransaction(state)
     .then((res) =>{
       setIsSaving(prev => !prev)
+      setViewingTransaction(null)
+      setTransactions(prev => [...prev, res.data.transaction])
        toast.success("Created successfully!!")
        navigate(`/view/${res.data.transaction._id}`)
        setState(initialState)

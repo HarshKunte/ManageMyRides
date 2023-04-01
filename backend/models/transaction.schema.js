@@ -78,9 +78,16 @@ const transactionSchema = mongoose.Schema(
         fuel_required:{
             type: Number
         },
+        fuel_expense:{
+          type:Number
+        },
         ride_mode:{
             type: String,
             enum: Object.keys(RideModes),
+        },
+        charged_lumpsum:{
+          type: Boolean,
+          default: false
         },
         total_bill:{
             type:Number,

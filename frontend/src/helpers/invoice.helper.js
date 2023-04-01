@@ -15,39 +15,45 @@ export const generateInvoiceData = (user, transaction) => {
     to_date:moment(transaction.from_date).utc().format("DD-MM-YYYY"),
     from_location: transaction.from_address,
     to_location: transaction.to_address,
+    charged_lumpsum: transaction.charged_lumpsum,
     items: [
       {
-        sno: 3,
+        sno: 1,
         desc: "No. of days",
         qty: transaction.no_of_days,
       },
       {
-        sno: 4,
+        sno: 2,
         desc: "Total Kms",
         qty: transaction.total_kms,
       },
       {
-        sno: 5,
+        sno: 3,
         desc: "Driver allowance (Rs.)",
         qty: transaction.driver_allowance,
       },
       {
-        sno: 6,
+        sno: 4,
         desc: "Toll (Rs.)",
         qty: transaction.toll_amt,
       },
       {
-        sno: 7,
+        sno: 5,
         desc: "GST (Rs.)",
         qty: transaction.tax_amt,
       },
       {
-        sno: 8,
+        sno: 6,
+        desc: "Lumpsum amount charged (Rs.)",
+        qty: transaction.total_bill,
+      },
+      {
+        sno: 7,
         desc: "Advance paid (Rs.)",
         qty: transaction.total_bill - transaction.pending_payment_amt,
       },
       {
-        sno: 9,
+        sno: 8,
         desc: "Pending amount (Rs.)",
         qty: transaction.pending_payment_amt,
       },
