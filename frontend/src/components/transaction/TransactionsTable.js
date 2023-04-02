@@ -5,6 +5,9 @@ import Context from "../../context/Context";
 function TransactionsTable({ data }) {
   const navigate = useNavigate();
   const {setViewingTransaction} = useContext(Context);
+  if(!data){
+    return <></>
+  }
   return (
     <div class="overflow-hidden border border-gray-200  md:rounded-lg">
       <table class="min-w-full divide-y divide-gray-200 ">
