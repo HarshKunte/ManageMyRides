@@ -1,5 +1,6 @@
 import axios from 'axios'
-const API = "http://localhost:4000/api"
+import { config } from '../config';
+const API = config.REACT_APP_DB_API
 export const authenticate = (data, next) => {
     if (typeof window !== "undefined") {
         localStorage.setItem("jwt", JSON.stringify({expires_in: Date.now() + 24*60*60*1000, data}))
