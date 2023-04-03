@@ -228,7 +228,7 @@ function Home() {
 
       <div className="flex flex-wrap mt-10">
         <div className="order-2 md:order-1 w-full md:w-3/5 ">
-        {transactions.length>0 &&<>
+        {transactions?.length>0 &&<>
         <h2 className="flex items-center gap-x-1 text-gray-600 mb-4 font-medium">
             <FaHistory />
             Recent Trips
