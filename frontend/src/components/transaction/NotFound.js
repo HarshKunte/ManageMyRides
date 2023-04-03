@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 function NotFound() {
     return ( 
 
@@ -41,7 +42,8 @@ function NotFound() {
       Uh-oh!
     </h1>
 
-    <p className="mt-4 text-gray-500">We can't find that transaction.</p>
+    <p className="mt-4 text-gray-500">We couldn't find that!.</p>
+    <Link to='/' className='underline underline-offset-2 text-red-500'>Take me Home</Link>
   </div>
 </div>
 

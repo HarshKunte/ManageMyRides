@@ -7,6 +7,7 @@ import Loading from "../../Loading.js";
 import { CSVLink } from "react-csv";
 import moment from "moment";
 import TransactionsTable from "../TransactionsTable";
+import { Link } from "react-router-dom";
 
 function AllTransactions() {
   //used for pagination. skipcount used in mongo db skip()
@@ -117,7 +118,10 @@ function AllTransactions() {
   }
 
   if (user?.total_transactions === 0) {
-    return <>No data found</>;
+    return <div className="text-center w-full py-10">
+      <p className="font-medium">You dont have any transactions yet!</p>
+      <Link className="underline underline-offset-2 text-sm text-gray-600" to='/add' >Add new transaction</Link>
+    </div>;
   }
 
   return (
@@ -134,7 +138,8 @@ function AllTransactions() {
             <span className="hidden sm:block">Export All Data</span>
           </button>
 
-          <CSVLink
+          {/* implement filters and uncomment below to export filtered data */}
+          {/* <CSVLink
             data={generateDataForExcel(filteredTransactions)}
             filename="Filtered Report"
             className="w-fit mb-5 flex items-center rounded-md border border-1 border-green-500 px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-2 hover:bg-white"
@@ -142,7 +147,7 @@ function AllTransactions() {
             <AiFillFileExcel className="w-4 h-4 text-green-500" />
 
             <span className="hidden sm:block">Export Table Data</span>
-          </CSVLink>
+          </CSVLink> */}
         </div>
         {excelFullData.length > 0 && (
           <CSVLink ref={csvRef} data={excelFullData} filename="Report" />

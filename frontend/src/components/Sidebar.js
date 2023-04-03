@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { IoAnalyticsSharp } from "react-icons/io5";
 import { RxAvatar } from "react-icons/rx";
 import { BsClipboard2DataFill } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {logout} from '../helpers/auth.helper.js'
 import { toast } from 'react-hot-toast';
 import Context from "../context/Context";
@@ -10,6 +10,7 @@ import Context from "../context/Context";
 function Sidebar() {
   const { user } = useContext(Context);
   const navigate = useNavigate()
+  const location = useLocation()
   const logOut = () => {
       logout()
       .then(res =>{
@@ -45,7 +46,7 @@ function Sidebar() {
         <nav aria-label="Main Nav" className="mt-6 flex flex-col space-y-3">
           <Link
             to="/add"
-            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-gray-700"
+            className={`flex items-center gap-2 rounded-lg ${location.pathname==='/add'? "bg-gray-100 text-gray-700": "hover:bg-gray-100 hover:text-gray-700 text-gray-500"}  px-4 py-2 `}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +68,7 @@ function Sidebar() {
 
           <Link
             to="/"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className={`flex items-center gap-2 rounded-lg px-4 py-2 ${location.pathname==='/'? "bg-gray-100 text-gray-700": "hover:bg-gray-100 hover:text-gray-700 text-gray-500"}`}
           >
             <IoAnalyticsSharp />
 
@@ -75,7 +76,7 @@ function Sidebar() {
           </Link>
           <Link
             to="/transactions"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className={`flex items-center gap-2 rounded-lg px-4 py-2 ${location.pathname==='/transactions'? "bg-gray-100 text-gray-700": "hover:bg-gray-100 hover:text-gray-700 text-gray-500"}`}
           >
             <BsClipboard2DataFill />
 
@@ -122,7 +123,7 @@ function Sidebar() {
             <nav aria-label="Account Nav" className="mt-2 flex flex-col px-4">
               <Link
                 to="/user/details"
-                className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                className={`flex items-center gap-2 rounded-lg px-4 py-2 ${location.pathname==='/user/details'? "bg-gray-100 text-gray-700": "hover:bg-gray-100 hover:text-gray-700 text-gray-500"}`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +145,7 @@ function Sidebar() {
               <button
                 onClick={logOut}
                 type="button"
-                className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                className={"flex w-full items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

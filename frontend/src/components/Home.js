@@ -164,7 +164,7 @@ function Home() {
           </div>
           <div class="flex flex-col justify-start">
             <div className="flex">
-              {getFormatedStringFromDays(user.total_no_of_days)
+              {user.total_no_of_days>0 && getFormatedStringFromDays(user.total_no_of_days)
                 .split(",")
                 .map(
                   (item, index) =>
@@ -178,6 +178,14 @@ function Home() {
                       </p>
                     )
                 )}
+                {
+                  user.total_no_of_days===0 && <p
+                  class="mt-3 ml-2 flex items-center text-3xl font-semibold text-left text-gray-800"
+                >
+                  0
+                  <span className="text-xs">days</span>
+                </p>
+                }
             </div>
           </div>
           <p className="text-xs text-gray-500">till now</p>
@@ -220,15 +228,18 @@ function Home() {
 
       <div className="flex flex-wrap mt-10">
         <div className="order-2 md:order-1 w-full md:w-3/5 ">
-          <h2 className="flex items-center gap-x-1 text-gray-600 mb-4 font-medium">
+        {transactions.length>0 &&<>
+        <h2 className="flex items-center gap-x-1 text-gray-600 mb-4 font-medium">
             <FaHistory />
             Recent Trips
           </h2>
-          <div class=" overflow-x-auto">
+           <div class=" overflow-x-auto">
             <div class="inline-block min-w-full py-2 align-middle ">
               <TransactionsTable data={transactions?.slice(0, 4)} />
             </div>
           </div>
+          </>}
+          
         </div>
         <div className="order-1 md:order-2 w-full md:w-2/5 flex justify-center items-center">
           <div className="w-64 xl:w-80 h-64 xl:h-80">
