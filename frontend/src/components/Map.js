@@ -1,6 +1,5 @@
 import React from "react";
 import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
-import { googleMapsApiData } from "../config";
 import { getGeoCode } from "../helpers/map.helper";
 
 const google = window.google

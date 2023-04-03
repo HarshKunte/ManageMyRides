@@ -1,6 +1,5 @@
 import React, { useContext, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import Context from "../../context/Context";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { resetPassword } from "../../helpers/auth.helper";

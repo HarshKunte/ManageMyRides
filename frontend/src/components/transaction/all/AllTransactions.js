@@ -13,7 +13,7 @@ function AllTransactions() {
   //used for pagination. skipcount used in mongo db skip()
   const [skipCount, setSkipCount] = useState(0);
   //used for pagination. limit number of documents fetched. used in mongo db limit()
-  const [documentLimit, setDocumentLimit] = useState(10);
+  const [documentLimit, _setDocumentLimit] = useState(10);
   const [excelFullData, setExcelFullData] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -12,7 +12,7 @@ import NewTransactionForm from "../create/NewTransactionForm";
 import Context from "../../../context/Context";
 function EditTransaction() {
   const [state, setState] = useState();
-  const [directionsResponse, setDirectionsResponse] = useState();
+  const [_directionsResponse, setDirectionsResponse] = useState();
   const { transactionId } = useParams();
   const { setViewingTransaction } = useContext(Context);
   const navigate = useNavigate();

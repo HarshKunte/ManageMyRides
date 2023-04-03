@@ -11,7 +11,7 @@ import {
   getFormatedStringFromDays,
   numberFormatter,
 } from "../helpers/transaction.helper.js";
-import Chart from "chart.js/auto";
+import _Chart from "chart.js/auto";
 import { Line, Bar, Pie } from "react-chartjs-2";
 import Loading from "./Loading.js";
 import TransactionsTable from "./transaction/TransactionsTable.js";
@@ -228,7 +228,7 @@ function Home() {
 
       <div className="flex flex-wrap mt-10">
         <div className="order-2 md:order-1 w-full md:w-3/5 ">
-        {transactions?.length>0 &&<>
+        {transactions && transactions.length>0 &&<>
         <h2 className="flex items-center gap-x-1 text-gray-600 mb-4 font-medium">
             <FaHistory />
             Recent Trips
