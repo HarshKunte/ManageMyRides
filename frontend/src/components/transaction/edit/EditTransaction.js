@@ -28,7 +28,6 @@ function EditTransaction() {
   const getData = async () => {
     try {
       const res = await getTransactionById(transactionId);
-      console.log(res);
       if (res.data?.success) {
         setState(res.data?.transaction);
 
@@ -49,7 +48,6 @@ function EditTransaction() {
   };
 
   const submitData = () => {
-    console.log(state);
     if (state.from_address === "") {
       setError("from_address", {
         type: "required",

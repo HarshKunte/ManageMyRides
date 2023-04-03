@@ -100,7 +100,6 @@ function NewTransactionForm({
         }
     }
     if (e.target.name == "closing_kms") {
-      console.log(e.target.value);
       if (state.starting_kms > value) {
         setError("closing_kms", {
           type: "custom",

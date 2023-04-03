@@ -8,7 +8,6 @@ function UserDetails() {
     const {user} = useContext(Context)
 
     useEffect(()=>{
-        console.log(user);
 
     },[user])
 

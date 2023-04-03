@@ -40,7 +40,6 @@ function ViewTransaction() {
   const getData = async () => {
     try {
       const res = await getTransactionById(transactionId);
-      console.log(res);
       if (res.data?.success) {
         setViewingTransaction(res.data?.transaction);
         setData(res.data?.transaction);
@@ -83,7 +82,6 @@ function ViewTransaction() {
     if (window.confirm("Are you sure you want to delete this transaction?")) {
       deleteTransactionById(data._id)
         .then((res) => {
-          console.log(res);
           if (res.data?.success) {
             setData(null);
             setViewingTransaction(null);

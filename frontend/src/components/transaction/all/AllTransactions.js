@@ -57,7 +57,6 @@ function AllTransactions() {
         fuel_expense
       };
     });
-    console.log(data);
     return data;
   };
 
@@ -93,7 +92,6 @@ function AllTransactions() {
   }, [excelFullData]);
 
   const fetchAllTransactions = () => {
-    console.log("clicked");
     getAllTransactions(0, 0)
       .then((res) => {
         if (res.data.success) {

@@ -53,8 +53,6 @@ function NewTransaction() {
   const navigate = useNavigate()
 
   const submitData = () => {  
-    
-    console.log(state);  
     if(state.from_address ===""){
       setError('from_address',{
         type: "required",
