@@ -31,8 +31,21 @@ Features📃
 Preview
 --------
 
-![dashboard]('readme_images\dashboard.png')
+![dashboard](./readme_images/dashboard.png)
 
-![view transaction]('readme_images\dashboard.png')
+Trip details along with trip route visible using Google Maps
+![view transaction](./readme_images/transaction.png)
 
-![dashboard]('readme_images\dashboard.png')
+All transactions visible at one place which can be directly exported to an **Excel sheet**.
+![all transactions](./readme_images/all_transactions.png)
+
+Sample Invoice
+
+![invoice](./readme_images/invoice.png)
+
+
+Credits
+-------
+
+-   The project is developed by Harsh Kunte and is inspired by the needs of taxi drivers to keep track of their trips and generate invoices.
+-   The project is built using open-source libraries and frameworks, including React JS, Tailwind CSS, Express.js, Node.js, MongoDB, and Google Maps API.
