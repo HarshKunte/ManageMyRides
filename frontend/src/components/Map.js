@@ -14,7 +14,6 @@ function Map({
   onMarkerUpdate,
 }) {
   const onDragFromMarkerEnd = (res) => {
-    console.log(res);
     getGeoCode(res.latLng.lat(), res.latLng.lng())
       .then((response) => {
         onMarkerUpdate("marker1", response.results[0].formatted_address);
@@ -22,7 +21,6 @@ function Map({
       .catch((e) => window.alert("Geocoder failed due to: " + e));
   };
   const onDragToMarkerEnd = (res) => {
-    console.log(res);
     getGeoCode(res.latLng.lat(), res.latLng.lng())
       .then((response) => {
         onMarkerUpdate("marker2", response.results[0].formatted_address);

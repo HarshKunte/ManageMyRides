@@ -133,7 +133,7 @@ function AllTransactions() {
           >
             <AiFillFileExcel className="w-4 h-4 text-green-500" />
 
-            <span className="hidden sm:block">Export All Data</span>
+            <span className="">Export All Data</span>
           </button>
 
           {/* implement filters and uncomment below to export filtered data */}

@@ -89,6 +89,7 @@ function Home() {
 
   useEffect(() => {
     calculateEarningsChartData();
+    setIsLoading(false)
   }, [reportData]);
 
   if (isLoading) {

@@ -21,6 +21,7 @@ function Signup() {
   }
 
   const [state, setState] = useState(initialState);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleChange = (e) => {
     setState({
@@ -30,15 +31,16 @@ function Signup() {
   };
 
   const onSubmit = () => {
+    setIsSaving(true)
     const {first_name, last_name, ...rest}=state
     const name = first_name[0].toUpperCase()+first_name.slice(1) +" "+last_name[0].toUpperCase()+last_name.slice(1)
     const data = {name, ...rest}
 
     signup(data)
     .then((res)=> {
-      console.log(res);
       if(res.data?.success){
         toast.success("Account created!")
+        setIsSaving(prev => !prev)
         navigate('/login')
         setState(initialState)
       }
@@ -233,6 +235,14 @@ function Signup() {
         </div>
         <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
           <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+          {isSaving &&<div
+        class="inline-block h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status"
+      >
+        <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+          Loading...
+        </span>
+      </div>}
             Create an account
           </button>
 

@@ -67,14 +67,14 @@ function UserDetails() {
           <button class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
             <AiTwotoneEdit className="w-5 h-5 text-blue-700" />
 
-            <span className="hidden sm:block">Edit Details</span>
+            <span className="">Edit Details</span>
           </button>
         </Link>
         <Link to={`/user/change_password/`}>
           <button class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
             <RiLockPasswordFill className="w-5 h-5 text-orange-500"/>
 
-            <span className="hidden sm:block">Change Password</span>
+            <span className="">Change Password</span>
           </button>
         </Link>
       </div>

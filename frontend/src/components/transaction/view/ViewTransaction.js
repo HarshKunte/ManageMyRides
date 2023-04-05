@@ -69,7 +69,7 @@ function ViewTransaction() {
       setData(viewingTransaction);
       setIsLoading(false);
     }
-  }, [transactionId]);
+  }, [transactionId, viewingTransaction]);
   useEffect(() => {
     if (data) {
       //set invoice data
@@ -141,7 +141,7 @@ function ViewTransaction() {
                 />
               </svg>
 
-              <span className="hidden sm:block">Edit</span>
+              <span className="">Edit</span>
             </button>
           </Link>
 
@@ -164,7 +164,7 @@ function ViewTransaction() {
               />
             </svg>
 
-            <span className="hidden sm:block">Delete</span>
+            <span className="">Delete</span>
           </button>
           <PDFDownloadLink
             document={<PdfDocument invoicedata={invoiceData} />}

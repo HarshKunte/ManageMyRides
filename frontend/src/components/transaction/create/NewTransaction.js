@@ -100,6 +100,7 @@ function NewTransaction() {
       submitData={submitData}
       setError = {setError}
       clearErrors={clearErrors}
+      isSaving={isSaving}
     />
     </section>
   );

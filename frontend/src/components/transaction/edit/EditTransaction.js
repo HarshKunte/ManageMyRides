@@ -12,6 +12,7 @@ import NewTransactionForm from "../create/NewTransactionForm";
 import Context from "../../../context/Context";
 function EditTransaction() {
   const [state, setState] = useState();
+  const [isSaving, setIsSaving] = useState(false);
   const [_directionsResponse, setDirectionsResponse] = useState();
   const { transactionId } = useParams();
   const { setViewingTransaction } = useContext(Context);
@@ -48,6 +49,7 @@ function EditTransaction() {
   };
 
   const submitData = () => {
+    setIsSaving(true)
     if (state.from_address === "") {
       setError("from_address", {
         type: "required",
@@ -68,6 +70,7 @@ function EditTransaction() {
         if (res.data?.success) {
           let id = res.data.transaction._id;
           setViewingTransaction(null)
+          setIsSaving(prev=>!prev)
           navigate(`/view/${id}`);
         }
       })
@@ -99,6 +102,8 @@ function EditTransaction() {
         submitData={submitData}
         setError={setError}
         clearErrors={clearErrors}
+        isSaving={isSaving}
+        setIsSaving={setIsSaving}
       />
     </section>
   );

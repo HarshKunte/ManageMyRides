@@ -22,11 +22,11 @@ function Sidebar() {
   };
 
   return (
-    <div className="flex menu h-screen flex-col justify-between border-r bg-white">
+    <div className="flex menu w-[73%] lg:w-auto h-screen flex-col justify-between border-r bg-white">
       <div className="px-4 py-6">
         <label
           htmlFor="my-drawer-2"
-          className="lg:hidden btn btn-square btn-ghost"
+          className="lg:hidden drawer-button btn btn-square btn-ghost"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@ function Sidebar() {
           </Link>
           <Link
             to="/transactions"
-            className={`flex items-center gap-2 rounded-lg px-4 py-2 ${location.pathname==='/transactions'? "bg-gray-100 text-gray-700": "hover:bg-gray-100 hover:text-gray-700 text-gray-500"}`}
+            className={` flex items-center gap-2 rounded-lg px-4 py-2 ${location.pathname==='/transactions'? "bg-gray-100 text-gray-700": "hover:bg-gray-100 hover:text-gray-700 text-gray-500"}`}
           >
             <BsClipboard2DataFill />
 
