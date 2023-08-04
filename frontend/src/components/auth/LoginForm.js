@@ -133,15 +133,17 @@ function LoginForm() {
             )}
             Login
           </button>
-
           <p className="mt-4 text-sm text-gray-500 sm:mt-0">
             Don't have an account?
             <Link to="/signup" className="text-gray-700 underline">
               Sign Up
             </Link>
           </p>
+          
         </div>
       </form>
+      <p className="mt-5 text-xs "> To try this app use <br/> <span className="text-blue-600">email: john@gmail.com  password: john1234 </span> </p>
+
     </>
   );
 }
