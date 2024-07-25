@@ -1,4 +1,4 @@
-/*global google*/
+
 import React from "react";
 import moment from "moment";
 import { rideModes, paymentModes } from "../../../util/enums.js";
