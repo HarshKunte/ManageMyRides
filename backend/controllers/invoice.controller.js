@@ -15,7 +15,6 @@ export const createInvoice = asyncHandler(async (req, res) => {
     throw new CustomError("Invoice already exists", 402);
   }
   try {
-    console.log(user, transactionId);
     const data = { user: user._id, transaction: transactionId };
     const invoice = await Invoice.create(data);
 
