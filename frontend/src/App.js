@@ -10,8 +10,6 @@ import MainContainer from "./components/MainContainer";
 import NewTransaction from "./components/transaction/create/NewTransaction";
 import ViewTransaction from "./components/transaction/view/ViewTransaction";
 import { ContextProvider } from "./context/Context";
-import { LoadScript } from "@react-google-maps/api";
-import { googleMapsApiData } from "./config";
 import EditTransaction from "./components/transaction/edit/EditTransaction";
 import AllTransactions from "./components/transaction/all/AllTransactions";
 import NotFound from "./components/transaction/NotFound";
@@ -20,14 +18,15 @@ import EditUserDetails from "./components/user/EditUseDetails";
 import ChangePassword from "./components/user/ChangePassword";
 import ForgotPass from "./components/auth/ForgotPass";
 import ResetPassword from "./components/auth/ResetPassword";
+import AllInvoices from "./components/invoice/all/AllInvoices";
+import AddFuelExpense from "./components/expense/fuel/AddFuelExpense";
+import AllFuelExpenses from "./components/expense/fuel/AllFuelExpenses";
+import AllOtherExpenses from "./components/expense/other/AllOtherExpenses";
+import AddOtherExpense from "./components/expense/other/AddOtherExpense";
 
 function App() {
   return (
     <div className="App font-['Poppins']">
-      <LoadScript
-        googleMapsApiKey={googleMapsApiData.googleMapsApiKey}
-        libraries={googleMapsApiData.libraries}
-      >
       <ContextProvider>
       <Router>
         <Routes>
@@ -41,6 +40,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/add" element={<NewTransaction />} />
             <Route path="/transactions" element={<AllTransactions />} />
+            <Route path="/invoices" element={<AllInvoices />} />
+            <Route path="/expense/fuel" element={<AllFuelExpenses />} />
+            <Route path="/expense/fuel/add" element={<AddFuelExpense />} />
+            <Route path="/expense/other" element={<AllOtherExpenses />} />
+            <Route path="/expense/other/add" element={<AddOtherExpense />} />
             <Route path="/view/:transactionId" element={<ViewTransaction />} />
             <Route path="/edit/:transactionId" element={<EditTransaction />} />
             <Route path="/user/details" element={<UserDetails />} />
@@ -58,7 +62,6 @@ function App() {
       </Router>
       <Toaster />
       </ContextProvider>
-      </LoadScript>
     </div>
   );
 }

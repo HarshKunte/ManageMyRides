@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  BsFuelPumpDiesel,
   BsCurrencyRupee,
   BsPiggyBankFill,
   BsCheckCircle,
 } from "react-icons/bs";
 import { TiLocation } from "react-icons/ti";
-import { TbFileDownload } from "react-icons/tb";
+import { TbFileDownload, TbDownload } from "react-icons/tb";
 import { AiOutlineCalendar, AiFillCar } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
-import Map from "../../Map.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   deleteTransactionById,
@@ -19,17 +17,15 @@ import {
 import { toast } from "react-hot-toast";
 import Context from "../../../context/Context.js";
 import moment from "moment";
-import { fuelModes } from "../../../util/enums.js";
-import { getDirectionsResponse } from "../../../helpers/map.helper.js";
 import Loading from "../../Loading.js";
 import NotFound from "../NotFound.js";
 import PdfDocument from "../../invoice/PdfDocument.js";
-import { generateInvoiceData } from "../../../helpers/invoice.helper.js";
+import { createInvoice, generateInvoiceData } from "../../../helpers/invoice.helper.js";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 function ViewTransaction() {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [directionsResponse, setDirectionsResponse] = useState();
+  const [invoiceGenerated, setInvoiceGenerated] = useState(false);
   const [invoiceData, setInvoiceData] = useState();
 
   const { transactionId } = useParams();
@@ -43,18 +39,13 @@ function ViewTransaction() {
       if (res.data?.success) {
         setViewingTransaction(res.data?.transaction);
         setData(res.data?.transaction);
+        if(res.data?.transaction.invoice_id){
+          setInvoiceGenerated(true)
+          let invoice = generateInvoiceData(res.data.user, res.data.transaction)
+          setInvoiceData(invoice)
+        }
         setUser(res.data.user);
         setIsLoading(false);
-
-        // eslint-disable-next-line no-undef
-        const directions = await getDirectionsResponse(
-          res.data.transaction.from_address,
-          res.data.transaction.to_address
-        );
-
-        if (directions) {
-          setDirectionsResponse(directions);
-        }
       }
     } catch (error) {
       console.log(error);
@@ -70,13 +61,7 @@ function ViewTransaction() {
       setIsLoading(false);
     }
   }, [transactionId, viewingTransaction]);
-  useEffect(() => {
-    if (data) {
-      //set invoice data
-      let invoice = generateInvoiceData(user, data);
-      setInvoiceData(invoice);
-    }
-  }, [data]);
+
 
   const deleteTransaction = () => {
     if (window.confirm("Are you sure you want to delete this transaction?")) {
@@ -113,6 +98,24 @@ function ViewTransaction() {
       });
   };
 
+  const generateInvoice = async () => {
+    createInvoice(data._id)
+    .then(res =>{
+      if(res.data.success){
+        let invoice = generateInvoiceData(user, res.data.updatedTransaction);
+        console.log(invoice);
+        setInvoiceData(invoice);
+        setInvoiceGenerated(true)
+        toast.success("You can download Invoice now!!")
+      }
+     
+    })
+    .catch(err =>{
+      console.log(err);
+      toast.error('Faied to generate invoice')
+    })
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -123,7 +126,27 @@ function ViewTransaction() {
   return (
     <section className="p-5 md:p-10">
       <section className="p-2 flex flex-col md:px-5 py-0">
-        <div class=" flex mb-5 sm:mb-10 self-end sm:self-start w-fit overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse  ">
+      {data.status === "deleted" && (
+                <span class="inline-flex items-center justify-center rounded-full bg-red-100 px-2.5 py-0.5 text-red-700">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="-ml-1 mr-1.5 h-4 w-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                    />
+                  </svg>
+
+                  <p class="whitespace-nowrap text-sm">Deleted Transaction</p>
+                </span>
+              )}
+        {data.status === "active" && <div class=" flex mb-5 sm:mb-10 self-end sm:self-start w-fit overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse  ">
           <Link to={`/edit/${transactionId}`}>
             <button class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100">
               <svg
@@ -166,26 +189,41 @@ function ViewTransaction() {
 
             <span className="">Delete</span>
           </button>
-          <PDFDownloadLink
+          {!invoiceGenerated? (<button
+            onClick={generateInvoice}
+            className="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100"
+          >
+            <TbFileDownload className="text-amber-400 w-4 h-4" />
+
+            <span className="">Generate Invoice</span>
+          </button>):
+          (<PDFDownloadLink
             document={<PdfDocument invoicedata={invoiceData} />}
             fileName="invoice.pdf"
           >
             {({ blob, url, loading, error }) =>
               loading ? (
-                ""
+                <div
+                class="inline-block h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status"
+              >
+                <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
+              </div>
               ) : (
                 <p
                   target="_blank"
-                  class="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100"
+                  className="flex items-center px-3 py-1 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-sm sm:px-3  gap-x-3 hover:bg-gray-100"
                 >
-                  <TbFileDownload className="text-amber-400 w-4 h-4" />
+                  <TbDownload className="text-amber-400 w-4 h-4" />
 
-                  <span className="">Invoice</span>
+                  <span className="">Download Invoice</span>
                 </p>
               )
             }
-          </PDFDownloadLink>
-        </div>
+          </PDFDownloadLink>)}
+        </div>}
         <div className="flex flex-wrap gap-y-5">
           <div className="w-full lg:w-1/2 ">
             <div className="flex justify-between items-start">
@@ -332,53 +370,11 @@ function ViewTransaction() {
             <article class="flex justify-between items-start rounded-lg border border-gray-100 bg-white p-4">
               <div class="flex self-start items-center gap-4">
                 <span class="hidden rounded-full bg-gray-100 p-2 text-gray-600 sm:block">
-                  <BsFuelPumpDiesel className="w-5 h-5" />
-                </span>
-
-                <div>
-                  <p class="text-sm text-gray-500">Fuel Details</p>
-
-                  <p class="text-lg font-medium text-gray-900">
-                    {data.fuel_required === 0 ? "NA" : data.fuel_required}{" "}
-                    <span className="text-xs">
-                      {fuelModes[data.fuel_mode]?.unit}
-                    </span>
-                  </p>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-500">Fuel Expense</p>
-
-                  <p class="text-lg font-medium text-gray-900">
-                  {data.fuel_expense}
-                    <span className="text-xs">
-                      Rs.
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex space-x-2">
-                <div class="inline-flex  gap-2 rounded mt-2 bg-blue-100 p-1 text-blue-600">
-                  <span class="text-xs font-medium">{data.fuel_mode}</span>
-                </div>
-                {data.fuel_rate !== 0 && (
-                  <div class="inline-flex gap-2 rounded mt-2 bg-sky-100 p-1 text-sky-600">
-                    <span class="text-xs font-medium">{`@${data.fuel_rate}/${
-                      fuelModes[data.fuel_mode]?.unit
-                    }`}</span>
-                  </div>
-                )}
-              </div>
-            </article>
-
-            <article class="flex justify-between items-start rounded-lg border border-gray-100 bg-white p-4">
-              <div class="flex self-start items-center gap-4">
-                <span class="hidden rounded-full bg-gray-100 p-2 text-gray-600 sm:block">
                   <AiFillCar className="w-5 h-5" />
                 </span>
 
                 <div>
-                  <p class="text-sm text-gray-500">Startin Kms.</p>
+                  <p class="text-sm text-gray-500">Starting Kms.</p>
 
                   <p class="text-lg font-medium text-gray-900">
                     {data.starting_kms === 0 ? "NA" : data.starting_kms}
@@ -452,7 +448,8 @@ function ViewTransaction() {
                 </div>
               </div>
             </article>
-
+          </div>
+          <div className="w-full lg:w-1/2 md:px-4">
             <article class="flex justify-between items-start rounded-lg mt-8 border border-gray-100 bg-white p-4">
               <div class="flex self-start items-center gap-4">
                 <span class="hidden rounded-full bg-gray-100 p-2 text-gray-600 sm:block">
@@ -502,11 +499,6 @@ function ViewTransaction() {
                 </div>
               </div>
             </article>
-          </div>
-
-          <div className="w-full lg:w-1/2 h-96  lg:px-10">
-            {/* // eslint-disable-next-line no-undef */}
-            <Map directionsResponse={directionsResponse} draggableMap={false} />
           </div>
         </div>
       </section>

@@ -27,6 +27,12 @@ export async function getAllTransactions(limit, skipCount){
     return await axios.get(`${API}/transactions/${limit}/${skipCount}`, config)
 }
 
+export const getFilteredTransactions = async (startDate, endDate, limit, skipCount) =>{
+    const token = isAuthenticated()
+    const config = {headers:{Authorization: `Bearer ${token}`}}
+    return await axios.get(`${API}/transactions/filter/${startDate}/${endDate}/${limit}/${skipCount}`, config)
+  }
+
 export async function getAllTransactionsReport(){
     const token = isAuthenticated()
     const config = {headers:{Authorization: `Bearer ${token}`}}

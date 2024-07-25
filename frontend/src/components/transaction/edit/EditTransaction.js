@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import { getDirectionsResponse } from "../../../helpers/map.helper";
 import {
   editTransaction,
   getTransactionById,
@@ -13,7 +12,6 @@ import Context from "../../../context/Context";
 function EditTransaction() {
   const [state, setState] = useState();
   const [isSaving, setIsSaving] = useState(false);
-  const [_directionsResponse, setDirectionsResponse] = useState();
   const { transactionId } = useParams();
   const { setViewingTransaction } = useContext(Context);
   const navigate = useNavigate();
@@ -31,16 +29,6 @@ function EditTransaction() {
       const res = await getTransactionById(transactionId);
       if (res.data?.success) {
         setState(res.data?.transaction);
-
-        // eslint-disable-next-line no-undef
-        const directions = await getDirectionsResponse(
-          res.data.transaction.from_address,
-          res.data.transaction.to_address
-        );
-
-        if (directions) {
-          setDirectionsResponse(directions);
-        }
       }
     } catch (error) {
       console.log(error);

@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import NewTransactionForm from "./NewTransactionForm";
-import moment from 'moment'
 import {toast} from 'react-hot-toast'
 import { createTransaction } from "../../../helpers/transaction.helper";
 import { useNavigate } from "react-router-dom";
@@ -49,30 +48,18 @@ function NewTransaction() {
 
   const [state, setState] = useState(initialState);
   const [isSaving, setIsSaving] = useState(false)
-  const {setTransactions, setViewingTransaction} = useContext(Context)
+  const {transactions, setTransactions, setViewingTransaction} = useContext(Context)
   const navigate = useNavigate()
 
   const submitData = () => {  
-    if(state.from_address ===""){
-      setError('from_address',{
-        type: "required",
-        message:"Required"
-      })
-      return
-    }
-    if(state.to_address ===""){
-      setError('from_address',{
-        type: "required",
-        message:"Required"
-      })
-      return
-    }
+    console.log(state);
 
     setIsSaving(true)
     createTransaction(state)
     .then((res) =>{
       setIsSaving(prev => !prev)
       setViewingTransaction(null)
+      if(transactions)
       setTransactions(prev => [...prev, res.data.transaction])
        toast.success("Created successfully!!")
        navigate(`/view/${res.data.transaction._id}`)
@@ -80,6 +67,7 @@ function NewTransaction() {
     })
     .catch(err =>{
       setIsSaving(prev => !prev)
+      toast.error('Failed to save data')
       console.log(err);
     })
 

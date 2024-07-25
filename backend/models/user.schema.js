@@ -31,6 +31,10 @@ const userSchema = mongoose.Schema(
         company_name:{
             type:String,
         },
+        vehicle_number:{
+            type:String,
+        },
+
         forgotPasswordToken: String,
         forgotPasswordExpiry: Date,
 

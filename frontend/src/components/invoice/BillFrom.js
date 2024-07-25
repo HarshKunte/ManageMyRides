@@ -20,7 +20,6 @@ const BillFrom = ({ invoice }) => {
     return(
     <View style={styles.headerContainer}>
         <Text  style={styles.billFrom}>{invoice.company_name.toUpperCase()}</Text>
-        <Text>{invoice.user_name}</Text>
         <Text>{invoice.user_mobile}</Text>
         <Text>{invoice.user_email}</Text>
     </View>

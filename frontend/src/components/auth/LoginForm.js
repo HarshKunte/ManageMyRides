@@ -19,6 +19,7 @@ function LoginForm() {
 
   const [state, setState] = useState(initialState);
   const [isSaving, setIsSaving] = useState(false);
+  const [showPass, setShowPass] = useState(false)
 
   const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ function LoginForm() {
         if (!response.data?.success || response.data?.message) {
           toast.error(response.data?.message);
           setState(initialState);
+          setIsSaving((prev) => !prev);
         }
       });
   };
@@ -94,7 +96,7 @@ function LoginForm() {
           </label>
 
           <input
-            type="password"
+            type= {showPass ? "text" : "password"}
             id="Password"
             name="password"
             className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
@@ -108,12 +110,19 @@ function LoginForm() {
             value={state.password}
             onChange={handleChange}
           />
-          <Link
-            to="/password/forgot"
-            className="text-xs text-gray-600 underline underline-offset-2 cursor-pointer"
-          >
-            Forgot password
-          </Link>
+
+          <div className="form-control">
+            <label className="label cursor-pointer justify-start">
+              <input
+                type="checkbox"
+                checked={showPass}
+                className="checkbox  w-4 h-4 checkbox-primary"
+                onClick={()=>setShowPass(!showPass)}
+              />
+              <span className="ml-2 label-text">Show password</span>
+            </label>
+          </div>
+
           {errors.password && (
             <p className="text-xs  text-red-500">{errors.password.message}</p>
           )}
@@ -133,17 +142,24 @@ function LoginForm() {
             )}
             Login
           </button>
+
           <p className="mt-4 text-sm text-gray-500 sm:mt-0">
             Don't have an account?
             <Link to="/signup" className="text-gray-700 underline">
               Sign Up
             </Link>
           </p>
-          
         </div>
+        <p className="col-span-6 mt-4 text-sm text-gray-500 sm:mt-0">
+          Dont remember your password??
+          <Link
+            to="/password/forgot"
+            className="ml-2 text-xs text-gray-600 underline underline-offset-2 cursor-pointer"
+          >
+            Reset password
+          </Link>
+        </p>
       </form>
-      <p className="mt-5 text-xs "> To try this app use <br/> <span className="text-blue-600">email: john@gmail.com  password: john1234 </span> </p>
-
     </>
   );
 }

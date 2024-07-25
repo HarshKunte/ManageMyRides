@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import {PaymentModes, RideModes, FuelModes} from '../util/enums.js'
+import {PaymentModes, RideModes} from '../util/enums.js'
 import User from './user.schema.js'
 
 const transactionSchema = mongoose.Schema(
@@ -67,20 +67,6 @@ const transactionSchema = mongoose.Schema(
         driver_allowance:{
             type: Number,
         },
-        
-        fuel_mode:{
-            type: String,
-            enum: Object.keys(FuelModes),
-        },
-        fuel_rate:{
-            type: Number
-        },
-        fuel_required:{
-            type: Number
-        },
-        fuel_expense:{
-          type:Number
-        },
         ride_mode:{
             type: String,
             enum: Object.keys(RideModes),
@@ -119,8 +105,19 @@ const transactionSchema = mongoose.Schema(
         },
         payment_mode:{
             type: String,
-            enum: Object.keys(PaymentModes),
+            enum: Object.values(PaymentModes),
             required: [true, "Payment mode is required."]
+        },
+        invoice_id:{
+          type:String
+        },
+        invoice_date:{
+          type: Date
+        },
+        status:{
+          type: String,
+            enum: ["active", "deleted"],
+            default:"active"
         }
         
     },
@@ -131,15 +128,19 @@ const transactionSchema = mongoose.Schema(
 )
 
 //method to calculate totals of kms, earnings, transactions and save to User Db
-transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
+transactionSchema.pre('save', async function(next){
    if(this.isModified('to_date') || this.isModified('from_date')){
     this.from_date = new Date(this.from_date)
     this.to_date = new Date(this.to_date)
    }
+   next()
+  })
 
-    //if total_kms or earnings is not modified do nothing
-    if(!this.isModified('total_kms') && !this.isModified('earnings')) return next()
-
+transactionSchema.post('save', async function(){
+   if(this.isModified('to_date') || this.isModified('from_date')){
+    this.from_date = new Date(this.from_date)
+    this.to_date = new Date(this.to_date)
+   }
     const userId = this.user._id
     User.aggregate([
         {
@@ -153,6 +154,20 @@ transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
             "localField": "_id",
             "foreignField": "user",
             "as": "transactions"
+          }
+        },
+        {
+          "$project": {
+            "transactions": {
+              "$filter": {
+                "input": "$transactions",
+                "cond": {
+                  "$eq": [
+                    "$$this.status", "active"
+                  ]
+                }
+              }
+            }
           }
         },
         {
@@ -190,15 +205,13 @@ transactionSchema.pre(['save', 'findByIdAndUpdate'], async function(next){
       }).catch(err =>{
         console.log('Error',err);
       })
-      next()
 })
-
-transactionSchema.post('findOneAndDelete', async function(doc){
-    const userId = doc.user._id
+transactionSchema.post('findOneAndUpdate', async function(){
+  const doc =  await this.model.findOne(this.getQuery());
     User.aggregate([
         {
           "$match": {
-            _id: userId
+            _id: doc.user
           }
         },
         {
@@ -210,6 +223,20 @@ transactionSchema.post('findOneAndDelete', async function(doc){
           }
         },
         {
+          "$project": {
+            "transactions": {
+              "$filter": {
+                "input": "$transactions",
+                "cond": {
+                  "$eq": [
+                    "$$this.status", "active"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
           "$addFields": {
             "total_kms": {
               "$sum": "$transactions.total_kms"
@@ -217,8 +244,14 @@ transactionSchema.post('findOneAndDelete', async function(doc){
             "total_earnings": {
               "$sum": "$transactions.earnings"
             },
+            "total_bills_amt": {
+              "$sum": "$transactions.total_bill"
+            },
             "total_transactions": {
               "$size": "$transactions"
+            },
+            "total_no_of_days": {
+              "$sum": "$transactions.no_of_days"
             }
           }
         },
@@ -234,11 +267,13 @@ transactionSchema.post('findOneAndDelete', async function(doc){
           }
         }
       ]).then(res =>{
-        console.log('ok');
+        console.log('ok2');
       }).catch(err =>{
         console.log('Error',err);
       })
+
 })
+
 
 
 

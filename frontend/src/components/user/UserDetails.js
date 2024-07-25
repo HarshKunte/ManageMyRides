@@ -1,6 +1,6 @@
 import { BiMobile } from "react-icons/bi";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { AiTwotoneEdit } from "react-icons/ai";
+import { AiTwotoneEdit, AiOutlineCar } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import Context from "../../context/Context";
@@ -35,6 +35,11 @@ function UserDetails() {
             </svg>
 
             <h1 class="px-2 text-sm">{user.company_name}</h1>
+          </div>
+          <div class="flex items-center mt-4 text-gray-700 ">
+            <AiOutlineCar className="w-6 h-6"/>
+
+            <h1 class="px-2 text-sm">{user.vehicle_number}</h1>
           </div>
 
           <div class="flex items-center mt-4 text-gray-700 ">

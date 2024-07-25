@@ -1,4 +1,5 @@
 import User from '../models/user.schema.js'
+import Counter from '../models/counter.schema.js'
 import asyncHandler from '../services/asyncHandler.js'
 import CustomError from '../services/customError.js'
 
@@ -25,9 +26,9 @@ export const signUp = asyncHandler(async (req, res) => {
         throw new CustomError('User already exists', 400)  
     }
     let user = await User.create(req.body );
+    const _counter = await Counter.create({user:user._id})
 
     const token = user.getJwtToken()
-    console.log(user);
     user.password = undefined
 
     res.cookie("token", token, cookieOptions)

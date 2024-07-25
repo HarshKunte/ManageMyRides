@@ -5,6 +5,9 @@ import cors from "cors";
 import authRoutes from './routes/auth.routes.js'
 import transactionRoutes from './routes/transaction.routes.js'
 import userRoutes from './routes/user.routes.js'
+import invoiceRoutes from './routes/invoice.routes.js'
+import fuelRoutes from './routes/fuel.routes.js'
+import otherExpenseRoutes from './routes/expense.router.js'
 const app = express();
 
 app.use(express.json())
@@ -33,5 +36,8 @@ app.use(function(req, res, next) {
 app.use('/api/',authRoutes)
 app.use('/api/',transactionRoutes)
 app.use('/api/',userRoutes)
+app.use('/api/',invoiceRoutes)
+app.use('/api/',fuelRoutes)
+app.use('/api/',otherExpenseRoutes)
 
 export default app

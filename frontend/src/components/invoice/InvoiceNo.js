@@ -39,11 +39,11 @@ const InvoiceNo = ({ invoice }) => (
         <View style={styles.invoiceContainer}>
         <View style={styles.invoiceNoContainer}>
             <Text style={styles.label}>Invoice No:</Text>
-            <Text style={styles.invoiceDate}>INV-{invoice.id}</Text>
+            <Text style={styles.invoiceDate}>{invoice.id}</Text>
         </View >
         <View style={styles.invoiceDateContainer}>
             <Text style={styles.label}>Date: </Text>
-            <Text >{moment().format('DD-MM-YYYY')}</Text>
+            <Text >{moment(invoice.date).format('DD-MM-YYYY')}</Text>
         </View >
         </View>
         </View>

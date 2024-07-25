@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
         lineHeight: 1.5,
         flexDirection: 'column',
     },
+    titles:{
+        fontFamily: 'Open Sans',
+        fontWeight:600
+    }
     
 });
 
@@ -58,6 +62,17 @@ const PdfDocument = ({ invoicedata }) => {
                 <BillTo invoice={invoicedata} />
                 <FromInfo invoice={invoicedata} />
                 <ToInfo invoice={invoicedata} />
+                </View>
+                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between', alignItems:'center', marginTop:15}} >
+                    <View style={{display:'flex',flexDirection:'row', alignItems:'center', rowGap:10}} >
+                        <Text style={styles.titles}>Vehicle No:</Text>
+                        <Text style={{marginTop:4, marginLeft:8}}>{invoicedata.vehicle_number}</Text>
+                    </View>
+                    <View style={{display:'flex',flexDirection:'row', alignItems:'center', rowGap:10}} >
+                        <Text style={styles.titles}>Driver name:</Text>
+                        <Text style={{marginTop:4, marginLeft:8}}>{invoicedata.user_name}</Text>
+                    </View>
+
                 </View>
                 <InvoiceItemsTable invoice={invoicedata} />
                 <InvoiceThankYouMsg />

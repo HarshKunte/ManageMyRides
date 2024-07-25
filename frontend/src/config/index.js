@@ -6,5 +6,5 @@ export const googleMapsApiData ={
 
 
 export const config = {
-  REACT_APP_DB_API : process.env.REACT_APP_DB_API
+  REACT_APP_DB_API : process.env.REACT_APP_DB_API || "http://localhost:4000/api/"
 }

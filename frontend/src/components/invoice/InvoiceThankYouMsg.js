@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
 const InvoiceThankYouMsg = () => (
     <View style={styles.titleContainer}>
         <Text style={styles.reportTitle}>*** Thank You ***</Text>
+        <Text style={{textAlign:'center', marginTop:40}}>This is computer generated invoice and does not require any signature.</Text>
     </View>
 );
 

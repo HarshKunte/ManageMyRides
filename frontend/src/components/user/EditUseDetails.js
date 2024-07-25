@@ -11,9 +11,9 @@ function EditUserDetails() {
     formState: { errors },
   } = useForm();
   const { user, setUser } = useContext(Context);
-  const {name, email, mobile, company_name} = user
+  const {name, email, mobile, company_name, vehicle_number} = user
 
-  const [state, setState] = useState({name, email, mobile, company_name});
+  const [state, setState] = useState({name, email, mobile, company_name, vehicle_number});
   const [isSaving, setIsSaving] = useState(false)
   const navigate = useNavigate()
 
@@ -117,6 +117,30 @@ function EditUserDetails() {
               {errors.company_name && (
                 <p className="text-xs  text-red-500">
                   {errors.company_name.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label class="text-gray-700 " htmlFor="company_name">
+                Vehicle No.
+              </label>
+              <input
+                name="vehicle_number"
+                type="text"
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
+                {...register("vehicle_number", {
+                  required: "Vehicle number is required",
+                  minLength: {
+                    value: 4,
+                    message: "Vehicle number must be at least 4 characters",
+                  },
+                })}
+                value={state.vehicle_number}
+                onChange={handleChange}
+              />
+              {errors.vehicle_number && (
+                <p className="text-xs  text-red-500">
+                  {errors.vehicle_number.message}
                 </p>
               )}
             </div>

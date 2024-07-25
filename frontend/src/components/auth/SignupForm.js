@@ -16,6 +16,7 @@ function Signup() {
     last_name: "",
     email: "",
     company_name: "",
+    vehicle_number: "",
     mobile: "",
     password: "",
   }
@@ -138,6 +139,35 @@ function Signup() {
           {errors.company_name && (
             <p className="text-xs  text-red-500">
               {errors.company_name.message}
+            </p>
+          )}
+        </div>
+        <div className="col-span-6 sm:col-span-3">
+          <label
+            htmlFor="vehicle_number"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Vehicle No.
+          </label>
+
+          <input
+            type="text"
+            id="vehicle_number"
+            name="vehicle_number"
+            className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+            {...register("vehicle_number", {
+              required: "Vehicle number is required",
+              minLength: {
+                value: 4,
+                message: "Vehicle number must be at least 4 characters",
+              },
+            })}
+            value={state.vehicle_number}
+            onChange={handleChange}
+          />
+          {errors.vehicle_number && (
+            <p className="text-xs  text-red-500">
+              {errors.vehicle_number.message}
             </p>
           )}
         </div>

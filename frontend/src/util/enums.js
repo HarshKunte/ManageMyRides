@@ -7,7 +7,8 @@ export const rideModes = {
 
 export const paymentModes = {
     UPI :"UPI",
-    CASH: "CASH",
+    CASH: "CASH",TRANSFER: "OLA/UBER"
+
 }
 
 export const fuelModes = {

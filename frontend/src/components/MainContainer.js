@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import { toast } from 'react-hot-toast';
 import { getUserDataApi } from '../helpers/user.helper';
 import Context from '../context/Context';
 import Loading from './Loading';
+import { logout } from '../helpers/auth.helper';
 function MainContainer() {
   const { user, setUser } = useContext(Context);
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -18,6 +20,8 @@ function MainContainer() {
           setIsLoading(false);
         })
         .catch((err) => {
+          logout()
+          navigate('/login')
           console.log(err);
           toast.error("Failed to receive data");
         });
